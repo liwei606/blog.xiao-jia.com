@@ -1,0 +1,420 @@
+#!/bin/bash
+########################################
+echo '##############################################################'
+echo '#                                                            #'
+echo '#  If you are using Mac OS X, please install GNU coreutils:  #'
+echo '#                                                            #'
+echo '#      $ brew install coreutils                              #'
+echo '#      $ mkdir -p ~/bin                                      #'
+echo '#      $ ln -s `which gsed` ~/bin/sed                        #'
+echo '#                                                            #'
+echo '#  Remember to add ~/bin to your $PATH variable.             #'
+echo '#                                                            #'
+echo '##############################################################'
+########################################
+# References:
+#   http://css-tricks.com/snippets/html/html5-page-structure/
+#   http://www.cyberciti.biz/tips/bash-shell-parameter-substitution-2.html
+#
+# Generate:
+#   /sitemap.xml
+#   /index.html
+#   /:year/:month/index.html
+#   /:year/:month/:day/:slug/index.html
+#   /tag/:slug/index.html
+#   /:page/index.html
+#
+########################################
+# Helper functions:
+#---------------------------------------
+function markdown {
+  multimarkdown $1 > $2
+}
+function append {
+  echo -n $1 >> $index
+}
+function build_post_path {
+  local name
+  name=${1#_posts/}
+  name=${name%.md}
+  local date
+  date=${name:0:10}
+  local slug
+  slug=${name:11}
+  path=''${date//-/\/}'/'${slug}'/'
+}
+function build_post_title {
+  title=$(head -n 3 $1 | grep -P '^title:' | grep -o -P '(?<=:).+')
+}
+function sed_escape {
+  sed -i -e 's@\/@\\/@g' $1
+  sed -i -e ':a' -e 'N' -e '$!ba' -e 's@\n@\\n@g' $1
+  sed -i -e 's@\&@\\\&@g' $1
+}
+function build_page_content {
+  sed_escape $index
+  page_content=$(cat $index)
+}
+function build_page_with_template {
+  cp tmp/sidebar.html tmp/sed-sidebar.html
+  sed_escape tmp/sed-sidebar.html
+  page_sidebar=$(cat tmp/sed-sidebar.html)
+  #
+  cp tmp/menubar.html tmp/sed-menubar.html
+  sed_escape tmp/sed-menubar.html
+  page_menubar=$(cat tmp/sed-menubar.html)
+  #
+  cp _template.html $index
+  sed -i -e "s/{{ page.content }}/${page_content}/g" $index
+  sed -i -e "s/{{ page.sidebar }}/${page_sidebar}/g" $index
+  sed -i -e "s/{{ page.menubar }}/${page_menubar}/g" $index
+  sed -i -e "s/{{ page.title }}/${page_title//\//\\/}/g" $index
+  sed -i -e "s/{{ blog.title }}/${blog_title//\//\\/}/g" $index
+  sed -i -e "s/{{ blog.author }}/${blog_author//\//\\/}/g" $index
+  sed -i -e "s/{{ blog.url }}/${blog_url//\//\\/}/g" $index
+}
+function build_readable_month {
+  local month
+  let month=10#$1
+  case $month in
+  1)
+    readable_month='January'
+    ;;
+  2)
+    readable_month='February'
+    ;;
+  3)
+    readable_month='March'
+    ;;
+  4)
+    readable_month='April'
+    ;;
+  5)
+    readable_month='May'
+    ;;
+  6)
+    readable_month='June'
+    ;;
+  7)
+    readable_month='July'
+    ;;
+  8)
+    readable_month='August'
+    ;;
+  9)
+    readable_month='September'
+    ;;
+  10)
+    readable_month='October'
+    ;;
+  11)
+    readable_month='November'
+    ;;
+  12)
+    readable_month='December'
+    ;;
+  *)
+    echo "unrecognized month: ${month}"
+  esac
+}
+function build_readable_date {
+  local year
+  year=${1:0:4}
+  local month
+  month=${1:5:2}
+  local day
+  day=${1:9:2}
+  build_readable_month $month
+  readable_date="${readable_month} ${day}, ${year}"
+}
+function build_archive_slug_and_slot {
+  local year
+  year=${1:0:4}
+  local month
+  month=${1:5:2}
+  build_readable_month $month
+  archive_slug="${year}/${month}/"
+  archive_slot="${readable_month} ${year}"
+}
+function append_post_begin_tag {
+  append '<article class="post type-post status-publish format-standard hentry">'
+}
+function append_post_header {
+  append '<header class="entry-header">'
+    append "<h1 class=\"entry-title\"><a href=\"{{ blog.url }}/${path}\" rel=\"bookmark\">${title}</a></h1>"
+  append '</header>'
+}
+function append_post_content {
+  append '<div class="entry-content">'
+    tail -n +$1 $file > "tmp/post.md"
+    markdown "tmp/post.md" "tmp/post.html"
+    cat "tmp/post.html" >> $index
+  append '</div>'
+}
+function append_post_footer {
+  append '<footer class="entry-meta">'
+    append "This entry was posted on <a href=\"{{ blog.url }}/${path}\" rel=\"bookmark\">"
+    build_readable_date ${file:7:10}
+    append "<time class=\"entry-date\" pubdate>${readable_date}</time></a>"
+    append '<span class="by-author"> by <span class="author vcard">'
+    append '<a class="url fn n" href="{{ blog.url }}" rel="author">{{ blog.author }}</a></span></span>'
+    head -n 3 $file | grep -P '^tags?:' | grep -o -P '(?<=:).+' | # tags
+    tr "," "\n" | while read tag; do
+      slug=$(echo $tag | tr ' ' '-')
+      append "&nbsp;&middot;&nbsp;<a href=\"{{ blog.url }}/tag/${slug}/\">${tag}</a>"
+    done
+  append '</footer>'
+}
+function append_post_end_tag {
+  append '</article>'
+}
+########################################
+# Configuration extraction:
+#---------------------------------------
+blog_url=$(grep -o -P '(?<=url:\s).+' _config.yml)
+blog_title=$(grep -o -P '(?<=title:\s).+' _config.yml)
+blog_author=$(grep -o -P '(?<=author:\s).+' _config.yml)
+disqus_id=$(grep -o -P '(?<=disqus:\s).+' _config.yml)
+#
+posts_on_homepage=7
+max_recent_posts=5
+########################################
+# Preparations:
+#---------------------------------------
+rm -rf tmp/
+mkdir tmp/
+#
+echo "<?xml version='1.0' encoding='UTF-8'?>" > sitemap.xml
+echo "<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>" >> sitemap.xml
+########################################
+# Recent posts:
+#---------------------------------------
+index='tmp/aside_recent_posts.html'
+rm -f $index
+let i=0
+append '<aside id="recent-posts" class="widget widget_recent_entries">'
+  append '<h3 class="widget-title">Recent Posts</h3>'
+  append '<ul>'
+  for file in `find _posts -name "*.md" | sort -r`; do
+    let i=i+1
+    if [ $i -gt $max_recent_posts ]; then
+      break
+    fi
+    build_post_path $file
+    build_post_title $file
+    append "<li><a href=\"{{ blog.url }}/${path}\">${title}</a></li>"
+  done
+  append '<ul>'
+append '</aside>'
+########################################
+# Archives:
+#---------------------------------------
+index='tmp/aside_archives.html'
+rm -f $index
+append '<aside id="archives" class="widget widget_archive">'
+  append '<h3 class="widget-title">Archives</h3>'
+  append "<ul>"
+  for file in `find _posts -name "*.md" | sort -r`; do
+    build_archive_slug_and_slot ${file:7:7}
+    if [ ! -d tmp/archives/${archive_slug} ]; then
+      mkdir -p tmp/archives/${archive_slug}
+      append "<li><a href=\"{{ blog.url }}/${archive_slug}\" title=\"${archive_slot}\">${archive_slot}</a></li>"
+    fi
+  done
+  append '</ul>'
+append '</aside>'
+########################################
+# Tags:
+#---------------------------------------
+rm -rf tmp/tag/
+mkdir -p tmp/tag/
+for file in `find _posts -name "*.md"`; do
+  head -n 3 $file | grep -P '^tags?:' | grep -o -P '(?<=:).+' | # tags
+  tr "," "\n" | while read tag; do
+    slug=$(echo $tag | tr ' ' '-')
+    # remember tag name for slug
+    echo -n $tag > "tmp/tag/${slug}"
+  done
+done
+#
+index='tmp/aside_tags.html'
+rm -f $index
+append '<aside id="categories" class="widget widget_categories">'
+  append '<h3 class="widget-title">Tags</h3>'
+  append '<ul>'
+  for slug in `ls tmp/tag/ | sort`; do
+    tag=$(cat tmp/tag/${slug})
+    append "<li class=\"cat-item\"><a href=\"{{ blog.url }}/tag/${slug}/\">${tag}</a></li>"
+  done
+  append '</ul>'
+append '</aside>'
+########################################
+# Sidebar:
+#---------------------------------------
+index='tmp/sidebar.html'
+rm -f $index
+cat tmp/aside_recent_posts.html >> $index
+cat tmp/aside_archives.html >> $index
+cat tmp/aside_tags.html >> $index
+########################################
+# Menubar:
+#---------------------------------------
+index='tmp/menubar.html'
+rm -f $index
+for file in `find _pages -name "*.md" | sort`; do
+  # $file = _pages/about.md
+  slug=${file#_pages/}
+  slug=${slug%.md}
+  # $slug = about
+  build_post_title $file
+  append '<li class="menu-item menu-item-type-post_type menu-item-object-page">'
+    append "<a href=\"{{ blog.url }}/${slug}/\">${title}</a>"
+  append '</li>'
+done
+########################################
+# /index.html
+#---------------------------------------
+echo "<url><loc>${blog_url}/</loc></url>" >> sitemap.xml
+index="index.html"
+rm -f $index
+let i=0
+for file in `find _posts -name "*.md" | sort -r`; do
+  let i=i+1
+  if [ $i -gt $posts_on_homepage ]; then
+    break
+  fi
+  build_post_path $file
+  build_post_title $file
+  append_post_begin_tag
+    append_post_header
+    append_post_content 5
+    append_post_footer
+  append_post_end_tag
+done
+build_page_content
+page_title='Home'
+build_page_with_template
+########################################
+# /:year/:month/index.html
+#---------------------------------------
+rm -rf 19??/ 20??/ 21??/
+rm -f tmp/archive_paths
+for file in `find _posts -name "*.md" | sort`; do
+  build_post_path $file
+  build_post_title $file
+  # $path = yyyy/mm/dd/slug/
+  archive_path=${path:0:8}
+  index="${archive_path}index.html"
+  mkdir -p $archive_path
+  echo $archive_path >> tmp/archive_paths
+  if [ ! -f $index ]; then
+    year=${archive_path:0:4}
+    month=${archive_path:5:2}
+    build_readable_month $month
+    append '<header class="archive-header">'
+      append "<h1 class=\"archive-title\">Monthly Archives: ${readable_month} ${year}</h1>"
+    append '</header>'
+  fi
+  append_post_begin_tag
+    append_post_header
+    append_post_content 5
+    append_post_footer
+  append_post_end_tag
+done
+for archive_path in `cat tmp/archive_paths | sort | uniq`; do
+  echo "<url><loc>${blog_url}/${archive_path}</loc></url>" >> sitemap.xml
+  index="${archive_path}index.html"
+  # $archive_path = yyyy/mm/
+  year=${archive_path:0:4}
+  month=${archive_path:5:2}
+  build_readable_month $month
+  build_page_content
+  page_title="Archive: ${readable_month} ${year}"
+  build_page_with_template
+done
+########################################
+# /:year/:month/:day/:slug/index.html
+#---------------------------------------
+for file in `find _posts -name "*.md"`; do
+  build_post_path $file
+  build_post_title $file
+  echo "<url><loc>${blog_url}/${path}</loc></url>" >> sitemap.xml
+  index="${path}index.html"
+  mkdir -p $path
+  append_post_begin_tag
+    append_post_header
+    append_post_content 5
+    append_post_footer
+  append_post_end_tag
+  append '<div id="disqus_thread"></div>'
+  append "<script src=\"http://${disqus_id}.disqus.com/embed.js\"></script>"
+  build_page_content
+  page_title=$title
+  build_page_with_template
+done
+########################################
+# /tag/:slug/index.html
+#
+# 1. for each post, for each tag, append
+# 2. for each tag, build with template
+#---------------------------------------
+rm -rf tag/
+rm -rf tmp/tag/
+mkdir -p tmp/tag/
+for file in `find _posts -name "*.md"`; do
+  build_post_path $file
+  build_post_title $file
+  head -n 3 $file | grep -P '^tags?:' | grep -o -P '(?<=:).+' | # tags
+  tr "," "\n" | while read tag; do
+    slug=$(echo $tag | tr ' ' '-')
+    mkdir -p "tag/${slug}/"
+    index="tag/${slug}/index.html"
+    if [ ! -f $index ]; then
+      append '<header class="archive-header">'
+        append "<h1 class=\"archive-title\">Tag Archives: ${tag}</h1>"
+      append '</header>'
+    fi
+    append_post_begin_tag
+      append_post_header
+      append_post_content 5
+      append_post_footer
+    append_post_end_tag
+    # remember tag name for slug
+    echo -n $tag > "tmp/tag/${slug}"
+  done
+done
+for slug in `ls tag`; do
+  tag=$(cat "tmp/tag/${slug}")
+  echo "<url><loc>${blog_url}/tag/${slug}/</loc></url>" >> sitemap.xml
+  index="tag/${slug}/index.html"
+  build_page_content
+  page_title='Tag: '$tag
+  build_page_with_template
+done
+########################################
+# /:page/index.html
+#---------------------------------------
+for file in `find _pages -name "*.md"`; do
+  slug=${file#_pages/}
+  slug=${slug%.md}
+  build_post_title $file
+  path="${slug}/"
+  #
+  rm -rf $path
+  mkdir -p $path
+  echo "<url><loc>${blog_url}/${path}</loc></url>" >> sitemap.xml
+  index="${path}index.html"
+  append_post_begin_tag
+    append_post_header
+    append_post_content 3
+  append_post_end_tag
+  #
+  build_page_content
+  page_title=$title
+  build_page_with_template
+done
+########################################
+# Clean up:
+#---------------------------------------
+echo '</urlset>' >> sitemap.xml
+rm -rf tmp/

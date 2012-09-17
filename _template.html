@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<!--[if IE 7 | IE 8]>
+<html class="ie" dir="ltr" lang="en">
+<![endif]-->
+<!--[if !(IE 7) | !(IE 8)  ]><!-->
+<html dir="ltr" lang="en">
+<!--<![endif]-->
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width"/>
+  <meta name="robots" content="noindex,nofollow"/>
+  <meta name="generator" content="markpress"/>
+  <meta name="description" content="{{ page.title }}"/>
+  <meta property="og:type" content="blog"/>
+  <meta property="og:title" content="{{ blog.title }}"/>
+  <meta property="og:url" content="{{ blog.url }}"/>
+  <meta property="og:description" content="{{ page.title }}"/>
+  <meta property="og:site_name" content="{{ blog.title }}"/>
+  <title>{{ page.title }} &middot; {{ blog.title }}</title>
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link rel="stylesheet" id="fonts-css" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700" type="text/css" media="all"/>
+  <link rel="stylesheet" id="all-css" href="{{ blog.url }}/style.css" type="text/css" media="all"/>
+</head>
+<body class="blog">
+  <div id="page" class="hfeed site">
+    <header id="masthead" class="site-header" role="banner">
+      <hgroup>
+        <h1 class="site-title"><a href="{{ blog.url }}" title="{{ blog.title }}" rel="home">{{ blog.title }}</a></h1>
+        <!--<h2 class="site-description"></h2>-->
+      </hgroup>
+      <nav id="site-navigation" class="main-navigation" role="navigation">
+        <h3 class="menu-toggle">Menu</h3>
+        <div class="skip-link assistive-text">
+          <a href="#content" title="Skip to content">Skip to content</a>
+        </div>
+        <div class="menu-main-menu-container">
+          <ul id="menu-main-menu" class="nav-menu">
+            <li class="menu-item menu-item-type-post_type menu-item-object-page">
+              <a href="{{ blog.url }}">Home</a>
+            </li>
+            {{ page.menubar }}
+          </ul>
+        </div>
+      </nav><!-- #site-navigation -->
+    </header><!-- #masthead -->
+    <div id="main" class="wrapper">
+      <div id="primary" class="site-content">
+        <div id="content" role="main">{{ page.content }}</div>
+      </div><!-- #primary -->
+      <div id="secondary" class="widget-area" role="complementary">{{ page.sidebar }}</div>
+    </div><!-- #main .wrapper -->
+    <footer id="colophon" role="contentinfo">
+      <div class="site-info">
+        Copyright &copy; 2012 <a href="{{ blog.url }}">{{ blog.author }}</a> &middot;
+        Themed by <a href="http://theme.wordpress.com/themes/twentytwelve/">Twenty Twelve</a> &middot;
+        Powered by <a href="https://github.com/stfairy/markpress" rel="generator">markpress</a>
+      </div><!-- .site-info -->
+    </footer><!-- #colophon -->
+  </div><!-- #page -->
+</body>
+</html>

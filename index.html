@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<!--[if IE 7 | IE 8]>
+<html class="ie" dir="ltr" lang="en">
+<![endif]-->
+<!--[if !(IE 7) | !(IE 8)  ]><!-->
+<html dir="ltr" lang="en">
+<!--<![endif]-->
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width"/>
+  <meta name="robots" content="noindex,nofollow"/>
+  <meta name="generator" content="markpress"/>
+  <meta name="description" content="Home"/>
+  <meta property="og:type" content="blog"/>
+  <meta property="og:title" content="随便想想"/>
+  <meta property="og:url" content="http://blog.xiao-jia.com"/>
+  <meta property="og:description" content="Home"/>
+  <meta property="og:site_name" content="随便想想"/>
+  <title>Home &middot; 随便想想</title>
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link rel="stylesheet" id="fonts-css" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700" type="text/css" media="all"/>
+  <link rel="stylesheet" id="all-css" href="http://blog.xiao-jia.com/style.css" type="text/css" media="all"/>
+</head>
+<body class="blog">
+  <div id="page" class="hfeed site">
+    <header id="masthead" class="site-header" role="banner">
+      <hgroup>
+        <h1 class="site-title"><a href="http://blog.xiao-jia.com" title="随便想想" rel="home">随便想想</a></h1>
+        <!--<h2 class="site-description"></h2>-->
+      </hgroup>
+      <nav id="site-navigation" class="main-navigation" role="navigation">
+        <h3 class="menu-toggle">Menu</h3>
+        <div class="skip-link assistive-text">
+          <a href="#content" title="Skip to content">Skip to content</a>
+        </div>
+        <div class="menu-main-menu-container">
+          <ul id="menu-main-menu" class="nav-menu">
+            <li class="menu-item menu-item-type-post_type menu-item-object-page">
+              <a href="http://blog.xiao-jia.com">Home</a>
+            </li>
+            <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="http://blog.xiao-jia.com/about/"> About</a></li>
+          </ul>
+        </div>
+      </nav><!-- #site-navigation -->
+    </header><!-- #masthead -->
+    <div id="main" class="wrapper">
+      <div id="primary" class="site-content">
+        <div id="content" role="main"><article class="post type-post status-publish format-standard hentry"><header class="entry-header"><h1 class="entry-title"><a href="http://blog.xiao-jia.com/2012/08/27/violet/" rel="bookmark"> Violet (The Architecture of Open Source Applications, Volume I)</a></h1></header><div class="entry-content"><p>原文链接：<a href="http://www.aosabook.org/en/violet.html">http://www.aosabook.org/en/violet.html</a><br/>
+作者：<a href="http://www.aosabook.org/en/intro1.html#horstmann-cay">Cay Horstmann</a><br/>
+译者：<a href="http://xiao-jia.com">Xiao Jia</a>（贾枭）</p>
+
+<p>2002 年，我写了一本关于面向对象设计与模式的本科教材 [<a href="http://www.aosabook.org/en/bib1.html#bib:horstmann:oodp">Hor05</a>]。和很多书一样，这本书也源于我对经典课程的沮丧。一般来说，计算机科学专业的学生，会在他们的第一门编程课上，学习如何设计一个独立的类。而此后，直到在高年级的软件工程课中，他们才在面向对象设计方面接受更多的训练。在这门课程中，学生在几个星期内匆忙地学习 UML 和设计模式，最终也只是走马观花。我写的这本书是为一个学期的课程准备的，学生需要具备一些 Java 编程和基本数据结构的知识（通常这些知识来自基于 Java 的 CS1 或 CS2 课程安排）。这本书在学生所熟悉的上下文中涵盖了面向对象设计原则和设计模式的内容。比如用 Swing 里面的 <code>JScrollPane</code> 类来介绍修饰模式（Decorator Pattern），目的是希望这个例子比经典的 Java 流的例子①更容易让人记住。</p>
+
+<blockquote>
+<p>① 译者注：如 <code>FileInputStream</code> 和 <code>BufferedInputStream</code> 等。</p>
+</blockquote>
+
+<figure>
+<img src="http://www.aosabook.org/images/violet/object-sample.png" alt="图 22.1：Violet 里的对象图（Object Diagram）" />
+<figcaption>图 22.1：Violet 里的对象图（Object Diagram）</figcaption></figure>
+
+
+
+<p>在这本书里，我需要一种轻量级的 UML，包括类图、顺序图，以及能够显示出 Java 对象引用的一种对象图（参见图 22.1）。我还想让学生能够绘制他们自己的UML图。然而，像 Rational Rose 这样的商业软件，不仅价格昂贵，还难以学习 [<a href="http://www.aosabook.org/en/bib1.html#bib:shumba:ratrose">Shu05</a>]。而在当时可用的开源替代品，则功能有限并且缺陷很多❶。比如需要使用文字来描述 UML 图，而不是使用更常见的点击式的界面。特别是 ArgoUML 软件中的顺序图，根本无法使用。</p>
+
+<blockquote>
+<p>❶ 当时我还不知道 Diomidis Spinellis 的令人钦佩的 UMLGraph 程序 [<a href="http://www.aosabook.org/en/bib1.html#bib:spinellis:umlgraph">Spi03</a>]</p>
+</blockquote>
+
+<p>于是我决定自己尝试去实现一个最简单的 UML 编辑器，它一要对学生有用，二要是一个可扩展的框架，便于学生理解和修改。就这样，Violet 诞生了。</p>
+
+<h2 id="violet">22.1. 初识 Violet</h2>
+
+<p>Violet 是一个轻量级的 UML 编辑器，适用于学生、教师，以及需要快速创建简单 UML 图的作者。它非常易于学习和使用。你可以用它绘制类图、顺序图、状态图、对象图和用例图。（至今，其他类型的 UML 图也已经有人贡献代码，实现了它们。）它是一个开放源代码并且跨平台的软件。Violet 的核心使用了一种简单而灵活的图形框架，该框架充分利用了 Java 2D 图形接口的优势。</p>
+
+<p>Violet 的用户界面被故意设计得很简单。你不需要通过一系列单调乏味的对话框来输入属性和方法。相反，你只需要把它们输入到一个文本框中。只要点几下鼠标，你就能快速地创建出既吸引人又实用的 UML 图。</p>
+
+<p>Violet 并不尝试去成为一个工业级的 UML 程序。下面是一些 Violet 不具备的特性：</p>
+
+<ul>
+<li>Violet 不能从 UML 图生成代码，也不能从代码生成 UML 图；</li>
+<li>Violet 不会对模型进行语义检查，所以你可以绘制出自相矛盾的 UML 图；</li>
+<li>Violet 生成的文件不能在其他UML工具中导入，它也不能读取其他工具产生的模型文件；</li>
+<li>除了一些简单的功能如“自动对齐到网格”，Violet 不提供 UML 图的自动布局功能。</li>
+</ul>
+
+<p>（尝试列出一些这样的局限性，对学生项目会很有帮助。）</p>
+
+<p>Violet 后来发展出一个由设计者构成的用户群体，他们想要一个比较正规的工具，但又不要像工业级的 UML 工具那么重量级。这时，我在 SourceForge 上以 GNU GPL 协议发布了代码。从 2005 年开始，Alexandre de Pellegrin 加入了这个项目，并提供了一个 Eclipse 插件和一个更加好看的用户界面。从那时起，他就开始进行很多架构上的改动。现在，他是这个项目的主要维护者。</p>
+
+<p>在这篇文章里，我会讨论在 Violet 原本架构中的一些选择，以及它的演变。这篇文章会有一部分的重点是在图形编辑上，但其他几部分，比如 JavaBeans 属性的使用、持久化、Java WebStart、插件架构，这些应该都是大家所普遍感兴趣的。</p>
+
+<h2 id="">22.2. 图形框架</h2>
+
+<p>Violet 基于一个通用的图形编辑框架，这个框架能够渲染和编辑任意形状的节点和边。Violet UML 编辑器把类、对象、（顺序图中的）方法调用框（activation bar）等对应为节点，而把 UML 图中的各种线条形状对应为边。这个图形框架的另一实例则可以显示实体关系图（ER 图）或铁路图②。</p>
+
+<blockquote>
+<p>② 译者注：railroad diagram，又称语法图（syntax diagram），是形式文法的一种图形化表示方式。</p>
+</blockquote>
+
+<figure>
+<img src="http://www.aosabook.org/images/violet/Ch8-06.png" alt="图 22.2：该图形编辑框架的一个简单实例" />
+<figcaption>图 22.2：该图形编辑框架的一个简单实例</figcaption></figure>
+
+
+
+<p>为了更好地解释这个框架，我们来考虑一个非常简单的图形编辑器，它包括黑色和白色的圆圈节点，以及直线边（参见图 22.2）。下面的 <code>SimpleGraph</code> 类定义了节点和边的原型对象（prototype objects），解释了什么是原型模式：</p>
+
+<pre><code>public class SimpleGraph extends AbstractGraph
+{
+  public Node[] getNodePrototypes()
+  {
+    return new Node[]
+    {
+      new CircleNode(Color.BLACK),
+      new CircleNode(Color.WHITE)
+    };
+  }
+  public Edge[] getEdgePrototypes()
+  {
+    return new Edge[]
+    {
+      new LineEdge()
+    };
+  }
+}
+</code></pre>
+
+<p>原型对象被用来绘制图 22.2 上方所示的节点和边的按钮。每当用户在图中添加一个新的节点或新的边，对应的原型对象就会被复制一份。上述代码中的 <code>Node</code>（节点）和 <code>Edge</code>（边）是具有下列关键方法的接口：</p>
+
+<ul>
+<li>两个接口都有一个 <code>getShape</code> 方法，用来返回一个 Java 2D 的 <code>Shape</code> 对象（分别是节点和边的形状）。</li>
+<li><code>Edge</code> 接口具有用来在边的两端产生节点的方法。</li>
+<li><code>Node</code> 接口中的 <code>getConnectionPoint</code> 方法负责计算出在节点边界上的一个最优的附着点（参见图 22.3）。</li>
+<li><code>Edge</code> 接口中的 <code>getConnectionPoints</code> 方法负责产生这条边的两个端点。绘制当前被选中的边的两个可以拖动的端点的时候需要这个方法。</li>
+<li>一个节点可以有一些跟随其自身移动的子节点。有很多方法就是用来枚举和管理这些子节点的。</li>
+</ul>
+
+<figure>
+<img src="https://raw.github.com/stfairy/aosa-violet/master/Ch8-07.png" alt="图 22.3：在节点的边界上找一个连接点" />
+<figcaption>图 22.3：在节点的边界上找一个连接点</figcaption></figure>
+
+
+
+<p>辅助类 <code>AbstractNode</code> 和 <code>AbstractEdge</code> 实现了接口要求的大部分方法，而 <code>RectangularNode</code> 和 <code>SegmentedLineEdge</code> 两个类则提供了完整的实现，分别包括带有文字标题的矩形节点以及由线段构成的边。</p>
+
+<p>对于我们的这个简单的图形编辑器，我们需要编写子类 <code>CircleNode</code> 和 <code>LineEdge</code>，来提供 <code>draw</code> 方法、<code>contains</code> 方法，以及描述节点边界形状的 <code>getConnectionPoint</code> 方法。它们的代码如下所示，同时，图 22.4 是由这些类构成的类图（当然，是用 Violet 绘制的）。</p>
+
+<pre><code>public class CircleNode extends AbstractNode
+{
+  public CircleNode(Color aColor)
+  {
+    size = DEFAULT_SIZE;
+    x = 0;
+    y = 0;
+    color = aColor;
+  }
+
+  public void draw(Graphics2D g2)
+  {
+    Ellipse2D circle = new Ellipse2D.Double(x, y, size, size);
+    Color oldColor = g2.getColor();
+    g2.setColor(color);
+    g2.fill(circle);
+    g2.setColor(oldColor);
+    g2.draw(circle);
+  }
+
+  public boolean contains(Point2D p)
+  {
+    Ellipse2D circle = new Ellipse2D.Double(x, y, size, size);
+    return circle.contains(p);
+  }
+
+  public Point2D getConnectionPoint(Point2D other)
+  {
+    double centerX = x + size / 2;
+    double centerY = y + size / 2;
+    double dx = other.getX() - centerX;
+    double dy = other.getY() - centerY;
+    double distance = Math.sqrt(dx * dx + dy * dy);
+    if (distance == 0) return other;
+    else return new Point2D.Double(
+      centerX + dx * (size / 2) / distance,
+      centerY + dy * (size / 2) / distance);
+  }
+
+  private double x, y, size, color;
+  private static final int DEFAULT_SIZE = 20;
+}
+
+public class LineEdge extends AbstractEdge
+{
+  public void draw(Graphics2D g2)
+  { g2.draw(getConnectionPoints()); }
+
+  public boolean contains(Point2D aPoint)
+  {
+    final double MAX_DIST = 2;
+    return getConnectionPoints().ptSegDist(aPoint) &lt; MAX_DIST;
+  }
+}
+</code></pre>
+
+<figure>
+<img src="http://www.aosabook.org/images/violet/SimpleGraph-in-Violet.png" alt="图 22.4：简单图形编辑器的类图" />
+<figcaption>图 22.4：简单图形编辑器的类图</figcaption></figure>
+
+
+
+<p>总的来说，Violet 为编写图形编辑器提供了一个简单的框架。通过定义节点和边所对应的类，并在图形类中提供产生节点和边的原型对象的方法，就可以得到一个编辑器的实例。</p>
+
+<p>当然，还有其他图形框架可以使用，比如 JGraph [<a href="http://www.aosabook.org/en/bib1.html#bib:alder:jgraph">Ald02</a>] 和 JUNG ❷。然而，这些框架都相当复杂，提供的也只是“用来绘制图形”的框架，而不是“用来绘制图形的应用程序”的框架。</p>
+
+<blockquote>
+<p>❷ <a href="http://jung.sourceforge.net">http://jung.sourceforge.net</a></p>
+</blockquote>
+
+<h2 id="javabeans">22.3. JavaBeans 属性的使用</h2>
+
+<p>在客户端 Java 的鼎盛时期，人们制定了 JavaBeans 规范，用来给在可视化 GUI 设计环境里编辑 GUI 组件提供可移植的机制。其目的是为了让一个第三方的 GUI 组件可以放在任意的 GUI 设计器中，并且它的属性可以像按钮、文本等标准组件一样进行设置。</p>
+
+<p>Java 语言本身没有对属性的原生支持。JavaBeans 属性可以从成对的 getter 和 setter 方法中发现出来，或者通过相应的 <code>BeanInfo</code> 类指定。进一步地，可以指定 <em>属性编辑器</em> 来可视化地编辑属性的值。JDK 甚至包含了一些基本的属性编辑器，比如用来编辑 <code>java.awt.Color</code> 类型的编辑器。</p>
+
+<p>Violet 框架充分利用了 JavaBeans 规范。比如，<code>CircleNode</code> 类可以通过提供如下两个方法，来暴露出颜色这一属性：</p>
+
+<pre><code>public void setColor(Color newValue)
+public Color getColor()
+</code></pre>
+
+<p>现在，不需要任何额外的工作，这个图形编辑器就能编辑圆圈节点的颜色了（参见图 22.5）。</p>
+
+<figure>
+<img src="http://www.aosabook.org/images/violet/Ch8-11.png" alt="图 22.5：使用默认的 JavaBeans 颜色编辑器来编辑圆圈节点的颜色" />
+<figcaption>图 22.5：使用默认的 JavaBeans 颜色编辑器来编辑圆圈节点的颜色</figcaption></figure>
+
+
+
+<h2 id="">22.4. 长期的持久化</h2>
+
+<p>和任何编辑器一样，Violet 需要将用户创建的 UML 图保存到文件中，并在之后重新载入进来。人们设计了 XMI 标准❸，作为 UML 模型的一种公共交换格式。我在看过 XMI 标准后，觉得它非常蹩脚，难以理解和使用。我想我并非唯一有这种感受的人——XMI 以极差的互操作性出名，即使对于最简单的模型也是如此 [<a href="http://www.aosabook.org/en/bib1.html#bib:persson:osstools">PGL+05</a>]。</p>
+
+<blockquote>
+<p>❸ <a href="http://www.omg.org/technology/documents/formal/xmi.htm">http://www.omg.org/technology/documents/formal/xmi.htm</a></p>
+</blockquote>
+
+<p>我曾考虑过直接使用 Java 的序列化（serialization）功能，但在实现经常有改动的情况下，读取旧版本的序列化后的对象非常困难。JavaBeans 的架构师们同样预见到了这一问题，于是他们为长期的持久化开发了一套标准的 XML 格式❹。一个 Java 对象（比如 Violet 里的 UML 图）会被序列化成一串语句，这些语句描述了创建和修改这个对象的过程。比如：</p>
+
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;java version=&quot;1.0&quot; class=&quot;java.beans.XMLDecoder&quot;&gt;
+ &lt;object class=&quot;com.horstmann.violet.ClassDiagramGraph&quot;&gt;
+  &lt;void method=&quot;addNode&quot;&gt;
+   &lt;object id=&quot;ClassNode0&quot; class=&quot;com.horstmann.violet.ClassNode&quot;&gt;
+    &lt;void property=&quot;name&quot;&gt;…&lt;/void&gt;
+   &lt;/object&gt;
+   &lt;object class=&quot;java.awt.geom.Point2D$Double&quot;&gt;
+    &lt;double&gt;200.0&lt;/double&gt;
+    &lt;double&gt;60.0&lt;/double&gt;
+   &lt;/object&gt;
+  &lt;/void&gt;
+  &lt;void method=&quot;addNode&quot;&gt;
+   &lt;object id=&quot;ClassNode1&quot; class=&quot;com.horstmann.violet.ClassNode&quot;&gt;
+    &lt;void property=&quot;name&quot;&gt;…&lt;/void&gt;
+   &lt;/object&gt;
+   &lt;object class=&quot;java.awt.geom.Point2D$Double&quot;&gt;
+    &lt;double&gt;200.0&lt;/double&gt;
+    &lt;double&gt;210.0&lt;/double&gt;
+   &lt;/object&gt;
+  &lt;/void&gt;
+  &lt;void method=&quot;connect&quot;&gt;
+   &lt;object class=&quot;com.horstmann.violet.ClassRelationshipEdge&quot;&gt;
+    &lt;void property=&quot;endArrowHead&quot;&gt;
+     &lt;object class=&quot;com.horstmann.violet.ArrowHead&quot; field=&quot;TRIANGLE&quot;/&gt;
+    &lt;/void&gt;
+   &lt;/object&gt;
+   &lt;object idref=&quot;ClassNode0&quot;/&gt;
+   &lt;object idref=&quot;ClassNode1&quot;/&gt;
+  &lt;/void&gt;
+ &lt;/object&gt;
+&lt;/java&gt;
+</code></pre>
+
+<blockquote>
+<p>❹ <a href="http://jcp.org/en/jsr/detail?id=57">http://jcp.org/en/jsr/detail?id=57</a></p>
+</blockquote>
+
+<p>当 <code>XMLDecoder</code> 类读取这个文件的时候，它会按顺序执行这些语句（为方便起见，包名已省略）。</p>
+
+<pre><code>ClassDiagramGraph obj1 = new ClassDiagramGraph();
+ClassNode ClassNode0 = new ClassNode();
+ClassNode0.setName(…);
+obj1.addNode(ClassNode0, new Point2D.Double(200, 60));
+ClassNode ClassNode1 = new ClassNode();
+ClassNode1.setName(…);
+obj1.addNode(ClassNode1, new Point2D.Double(200, 60));
+ClassRelationShipEdge obj2 = new ClassRelationShipEdge();
+obj2.setEndArrowHead(ArrowHead.TRIANGLE);
+obj1.connect(obj2, ClassNode0, ClassNode1);
+</code></pre>
+
+<p>只要这些构造函数、属性和方法的语义没有改变，新版本的程序就能够读取旧版本程序生成的文件。</p>
+
+<p>生成这样的文件非常直观。编码器（encoder）自动地枚举每个对象的属性，对于那些不同于默认值的属性，编码器会为这些属性输出设置属性值的语句。Java 平台处理了大部分基本数据类型，然而我需要特殊处理 <code>Point2D</code>、<code>Line2D</code> 和 <code>Rectangle2D</code> 这三个类。更重要的是，编码器需要知道，一个图形可以被序列化成一串对 <code>addNode</code> 和 <code>connect</code> 方法的调用：</p>
+
+<pre><code>encoder.setPersistenceDelegate(Graph.class, new DefaultPersistenceDelegate()
+{
+  protected void initialize(Class&lt;?&gt; type, Object oldInstance,
+    Object newInstance, Encoder out)
+  {
+    super.initialize(type, oldInstance, newInstance, out);
+    AbstractGraph g = (AbstractGraph) oldInstance;
+    for (Node n : g.getNodes())
+      out.writeStatement(new Statement(oldInstance, &quot;addNode&quot;, new Object[]
+      {
+        n,
+        n.getLocation()
+      }));
+    for (Edge e : g.getEdges())
+      out.writeStatement(new Statement(oldInstance, &quot;connect&quot;, new Object[]
+      {
+        e, e.getStart(), e.getEnd()
+      }));
+  }
+});
+</code></pre>
+
+<p>一旦配置好编码器，保存一个图形就变得非常简单了：</p>
+
+<pre><code>encoder.writeObject(graph);
+</code></pre>
+
+<p>因为解码器（decoder）只是简单地执行语句，所以不需要额外的配置。可以像下面这样读取一个图形：</p>
+
+<pre><code>Graph graph = (Graph) decoder.readObject();
+</code></pre>
+
+<p>在 Violet 经过了许许多多版本的过程中，这个方法一直工作得相当好。但是有一次例外：最近的一次重构改变了一些包的名字，因此破坏了向后兼容性。一种选择是，仍然保留旧包中的那些类，即使它们和新的包结构已经不再匹配。然而，维护者没有这样做，而是提供了一个 XML 转换器，用来在读取旧版本文件的时候改写包名。</p>
+
+<h2 id="javawebstart">22.5. Java WebStart</h2>
+
+<p>Java WebStart 是用来在网页浏览器中启动应用程序的一门技术。部署者发布一个 JNLP 文件③，该文件在浏览器中会触发一个辅助程序，该程序会下载并运行相应的 Java 应用程序。应用程序可以是数字签名过的，此时用户必须同意接受其证书；或者程序是未签名的，此时它只能运行在一个比 applet 沙盒权限稍高的沙盒环境中。</p>
+
+<blockquote>
+<p>③ 译者注：JNLP 即 Java Network Launching Protocol。</p>
+</blockquote>
+
+<p>我不认为终端用户有能力判断数字证书的有效性及其暗含的安全性。Java 平台长处之一就是它的安全性，而我觉得发挥这一长处是很重要的。</p>
+
+<p>Java WebStart 沙盒已经足够强大了，它可以支持用户进行很多有用的工作，包括读取和保存文件，以及打印。这些操作都从用户的角度保证了安全性和易用性。当应用程序想要访问本地文件系统时，会弹出对话框提示用户，并由用户来选择可以被读写的文件。应用程序仅能得到一个用于读写文件的流对象，而在文件选择的过程中，没有任何机会窥探到文件系统的情况。</p>
+
+<p>让人讨厌的是，在 WebStart 下运行时，开发者必须自己编写代码来和 <code>FileOpenService</code> 以及 <code>FileSaveService</code> 进行交互。更讨厌的是，没有一个 WebStart 接口调用，可以知道应用程序是否是由 WebStart 启动的。</p>
+
+<p>类似地，保存用户的使用偏好也必须以两种方式来实现：当应用程序正常运行时，使用 Java 偏好接口（Java Preferences API）；当应用程序在 WebStart 下运行时，使用 WebStart 偏好服务（WebStart Preferences Service）。然而，打印功能对于应用开发者来说则是完全透明的④。</p>
+
+<blockquote>
+<p>④ 译者注：即正常运行和在 WebStart 下运行时，不需要以不同的方式来实现。</p>
+</blockquote>
+
+<p>Violet 在这些服务之上提供了简单的抽象层，以减轻应用开发者的负担。比如，下面是一个打开文件的例子：</p>
+
+<pre><code>FileService service = FileService.getInstance(initialDirectory);
+  // 检查我们是否正在 WebStart 下运行
+FileService.Open open = fileService.open(defaultDirectory, defaultName,
+  extensionFilter);
+InputStream in = open.getInputStream();
+String title = open.getName();
+</code></pre>
+
+<p><code>FileService.Open</code> 接口有两个实现类：一个是对 <code>JFileChooser</code> 的封装，另一个则是 JNLP 的 <code>FileOpenService</code>。</p>
+
+<p>JNLP 接口本身并非如此方便；在其生命周期里，很少有人喜欢它，以至于它基本上已经被大家忽略了。大多数的项目直接为其 WebStart 应用程序使用可一个自己签名的证书，而对于用户来说，这毫无安全性可言。这是一种耻辱——开源开发者应该拥护 JNLP 沙盒，把它作为尝试新项目的一种零风险的方式。</p>
+
+<h2 id="java2d">22.6. Java 2D</h2>
+
+<p>Violet 大量使用了 Java 2D；它是 Java API（应用程序接口）中鲜为人知的珍宝。每个节点和边都有一个 <code>getShape</code> 方法，返回一个 <code>java.awt.Shape</code> 接口的对象。这个接口是 Java 2D 中所有形状的公共接口，矩形、圆形、路径，以及它们的并、交和差，都实现了这一接口。如果要创建由任意线段和二次/三次曲线段构成的图形，比如直箭头和弯箭头，<code>GeneralPath</code> 类就很有用。</p>
+
+<p>考虑下面这段绘制阴影的代码（摘自 <code>AbstractNode.draw</code> 方法），从中我们可以欣赏到 Java 2D 接口的灵活之美：</p>
+
+<pre><code>Shape shape = getShape();
+if (shape == null) return;
+g2.translate(SHADOW_GAP, SHADOW_GAP);
+g2.setColor(SHADOW_COLOR);
+g2.fill(shape);
+g2.translate(-SHADOW_GAP, -SHADOW_GAP);
+g2.setColor(BACKGROUND_COLOR);
+g2.fill(shape);
+</code></pre>
+
+<p>只需要几行代码，就可以为任意的形状产生阴影，甚至包括开发者在后来才加入的形状。</p>
+
+<p>当然，Violet 能以任何格式保存位图图像，只要 <code>javax.imageio</code> 这个包支持，比如 GIF、PNG、JPEG，等等。当我的出版商要我提供矢量图形的时候，我注意到了 Java 2D 的另一个好处。当你打印到一个 PostScript 打印机的时候，Java 2D 操作会被翻译成 PostScript 矢量绘图操作。如果你打印到一个文件，输出的文件可以使用 <code>ps2eps</code> 这样的程序处理，进而导入到 Adobe Illustrator 或 Inkscape 中。下面是相关的代码（这里 <code>comp</code> 是一个 Swing 组件，它的 <code>paintComponent</code> 方法打印上述图形）：</p>
+
+<pre><code>DocFlavor flavor = DocFlavor.SERVICE_FORMATTED.PRINTABLE;
+String mimeType = &quot;application/postscript&quot;;
+StreamPrintServiceFactory[] factories;
+StreamPrintServiceFactory.lookupStreamPrintServiceFactories(flavor, mimeType);
+FileOutputStream out = new FileOutputStream(fileName);
+PrintService service = factories[0].getPrintService(out);
+SimpleDoc doc = new SimpleDoc(new Printable() {
+  public int print(Graphics g, PageFormat pf, int page) {
+    if (page &gt;= 1) return Printable.NO_SUCH_PAGE;
+    else {
+      double sf1 = pf.getImageableWidth() / (comp.getWidth() + 1);
+      double sf2 = pf.getImageableHeight() / (comp.getHeight() + 1);
+      double s = Math.min(sf1, sf2);
+      Graphics2D g2 = (Graphics2D) g;
+      g2.translate((pf.getWidth() - pf.getImageableWidth()) / 2,
+              (pf.getHeight() - pf.getImageableHeight()) / 2);
+      g2.scale(s, s);
+
+      comp.paint(g);
+      return Printable.PAGE_EXISTS;
+    }
+  }
+}, flavor, null);
+DocPrintJob job = service.createPrintJob();
+PrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
+job.print(doc, attributes);
+</code></pre>
+
+<p>开始的时候，我还在担心使用通用的形状（general shapes）会影响性能，但事实证明并非如此。裁剪功能（clipping）工作得很好，只有那些更新当前视图（viewport）的形状操作才会被执行。</p>
+
+<h2 id="swing">22.7. 不使用 Swing 应用程序框架</h2>
+
+<p>大多数 GUI 框架都有一个类似“应用程序”的概念，它负责管理一组文档，一个文档则负责处理菜单、工具栏、状态栏，等等。然而，Java API 中从来没有这个概念。JSR 296 ❺的提出，目的是为 Swing 应用程序提供一个基本的框架，但目前它已经处于闲置状态了。因此，Swing 应用程序的作者有两种选择，要么“重新发明轮子”⑤，要么依靠一个第三方的框架。在编写 Violet 的时候，应用程序框架的主流选择是 Eclipse 和 NetBeans 平台，但当时它们看上去都太重量级了。（现如今我们有更多的选择了，比如 GUTS ❻，它是 JSR 296 的一个分支。）因此，Violet 被迫重新发明了处理菜单和内部框架（internal frames）的机制。</p>
+
+<blockquote>
+<p>❺ <a href="http://jcp.org/en/jsr/detail?id=296">http://jcp.org/en/jsr/detail?id=296</a><br/>
+❻ <a href="http://kenai.com/projects/guts">http://kenai.com/projects/guts</a></p>
+
+<p>⑤ 译者注：reinvent the wheel，指对一些基本或常见的问题，不采纳现有的成熟的方案。</p>
+</blockquote>
+
+<p>在 Violet 中，你可以像下面这样，在属性文件（property files）中指定菜单项：</p>
+
+<pre><code>file.save.text=Save
+file.save.mnemonic=S
+file.save.accelerator=ctrl S
+file.save.icon=/icons/16x16/save.png
+</code></pre>
+
+<p>有一个工具方法从前缀（比如这里的 <code>file.save</code>）创建菜单项。<code>.text</code>、<code>.mnemonic</code>这样的后缀，在今天一般被称作“约定优于配置”。使用资源文件来描述这些设置，显然要比调用 API 来建立菜单高级得多，因为这让本地化（localization）变得十分简单。我在另一个开源项目 GridWorld ❼中重用了这一机制，它是一个高中计算机科学教学的环境。</p>
+
+<blockquote>
+<p>❼ <a href="http://horstmann.com/gridworld">http://horstmann.com/gridworld</a></p>
+</blockquote>
+
+<p>Violet 这样的应用程序，都允许用户打开多个文档，每个文档包含一个图形。最初编写 Violet 的时候，多文档接口（MDI，multiple document interface）还很流行。使用 MDI 时，主框架（main frame）有一个菜单栏，而每个文档的视图显示在一个内部框架中，这个内部框架有标题栏但是没有菜单栏。每个内部框架都被包含在主框架中，用户可以修改它的大小，或者最小化它。此外，还有操作用于层叠或平铺窗口。</p>
+
+<p>很多开发者不喜欢 MDI，因此这种风格的用户界面已经过时了。单文档接口（SDI，single document interface）的应用程序则显示很多顶层的框架。一段时间里，SDI 被认为更加高级，大概是因为可以使用宿主操作系统的标准窗口管理工具来操作这些顶层框架。当人们最终意识到太多的顶层窗口也不是很方便的时候，标签页界面（tabbed interfaces）出现了。标签页界面中，多个文档再次被放到一个单个的框架中，但每个都是以完整大小显示的，并且可以通过标签（tabs）来选择。这种界面不允许用户并排比较两个文档，但看起来还是胜出了。</p>
+
+<p>Violet 最初使用的是 MDI。Java API 包含了内部框架这一特性，但我需要增加对平铺和层叠窗口的支持。Alexandre 切换到了标签页界面；从某种程度上来说，这种界面在 Java API 中得到了更好的支持。在应用程序框架中，如果文档的显示策略对于开发者是透明的，或许是可以让用户来选择的，那将是非常可取的。</p>
+
+<p>Alexandre 还增加了对侧边栏、状态栏、欢迎面板、启动闪屏的支持。理想情况下，所有这些都应该是 Swing 应用程序框架所支持的。</p>
+
+<h2 id="undoredo">22.8. 撤消（undo）和重做（redo）</h2>
+
+<p>实现多次撤消和重做，看起来是一件令人怯步的任务，但 Swing 的撤销功能包（undo package，[<a href="http://www.aosabook.org/en/bib1.html#bib:topley:coreswing">Top00</a>]，第九章）给出了一个很好的架构上的指南。一个 <code>UndoManager</code>（撤消管理器）管理一个 <code>UndoableEdit</code>（可撤消的编辑）对象的栈（stack）。这里面的每一个对象，都有一个 <code>undo</code> 方法负责撤消该编辑操作的作用，还有一个 <code>redo</code> 方法负责重做该编辑操作（恢复效果）。一个 <code>CompoundEdit</code>（复合编辑）是一串 <code>UndoableEdit</code> 操作，它们可以作为一个整体被撤消或重做。我们鼓励你定义小的、原子的（atomic）编辑操作（比如在一个图里增加或删除一条边或一个节点），而这些操作可以按需被组织成一个复合的编辑操作。</p>
+
+<p>随之而来的一个挑战就是如何定义一个小的原子操作集合，使得其中每个操作都容易撤消。Violet 中有如下几种原子操作：</p>
+
+<ul>
+<li>增加或删除一个节点或一条边</li>
+<li>附着（attach）或拆开（detach）一个节点的子节点</li>
+<li>移动一个节点</li>
+<li>改变节点或边的属性</li>
+</ul>
+
+<p>上述每种操作都有一个很显然的撤消方法。比如，“增加一个节点”的撤消方法就是删掉这个节点，“移动一个节点”的撤消方法就是按相反的向量移动这个节点。</p>
+
+<figure>
+<img src="http://www.aosabook.org/images/violet/undo.png" alt="图 22.6：撤消操作必须撤消模型中的结构化的更改" />
+<figcaption>图 22.6：撤消操作必须撤消模型中的结构化的更改</figcaption></figure>
+
+
+
+<p>注意，这些原子操作<strong>不同于</strong>用户界面中的那些动作，或者是这些动作所调用的 <code>Graph</code> 接口的方法。比如，考虑图 22.6 中的顺序图，假设用户从左侧的方法调用框拖动鼠标到右侧的对象生命线，当鼠标被松开时，下面的方法会被调用：</p>
+
+<pre><code>public boolean addEdgeAtPoints(Edge e, Point2D p1, Point2D p2)
+</code></pre>
+
+<p>这个方法会增加一条边，但它也可能根据具体参与调用的 <code>Edge</code> 和 <code>Node</code> 子类，进行其他操作。在这个例子中，右侧的对象生命线会增加一个新的方法调用框，那么撤消这一操作的时候，这个新的方法调用框也要被删掉。因此，模型（此例中的图形）还需要记录所需撤消的结构化的更改，而仅仅记录控制器（controller）中的操作是不够的。</p>
+
+<p>正如 Swing 的撤销功能包所预想的，在发生一个结构化的更改时，图形、节点、边的这些类需要向 <code>UndoManager</code> 发送 <code>UndoableEditEvent</code>（可撤消的编辑事件）通知。Violet 具有一个更加通用的设计——图形自身为如下接口管理监听器（listeners）：</p>
+
+<pre><code>public interface GraphModificationListener
+{
+  void nodeAdded(Graph g, Node n);
+  void nodeRemoved(Graph g, Node n);
+  void nodeMoved(Graph g, Node n, double dx, double dy);
+  void childAttached(Graph g, int index, Node p, Node c);
+  void childDetached(Graph g, int index, Node p, Node c);
+  void edgeAdded(Graph g, Edge e);
+  void edgeRemoved(Graph g, Edge e);
+  void propertyChangedOnNodeOrEdge(Graph g, PropertyChangeEvent event);
+}
+</code></pre>
+
+<p>Violet 框架在每个图形中安装一个监听器，作为与撤消管理器交互的桥梁。对于支持撤消功能来说，为模型增加通用的监听器支持是有点过度设计了（overdesigned）——图形操作可以直接与撤销管理器交互。然而，我还想支持一种实验性质的协作式编辑特性（collaborative editing feature）。</p>
+
+<p>如果你想在你的应用程序中支持撤消和重做，仔细想想你的模型（而非你的界面）中的原子操作。在模型中，当发生结构化的改变时，触发相应的事件，并允许 Swing 的撤销管理器来收集、组合这些事件。</p>
+
+<h2 id="">22.9. 插件架构</h2>
+
+<p>对于熟悉 2D 图形编程的程序员来说，为 Violet 增加新类型的图并不困难。比如，活动图就是由第三方贡献开发的。当我需要创建铁路图和 ER 图的时候，我发现给 Violet 写一个扩展，要比胡乱使用 Visio 或 Dia 来得更快。（每种类型的图需要花一天的时间来实现。）</p>
+
+<p>这些实现并不要求你理解整个 Violet 框架。只需要实现图形、节点和边的接口即可。为了让贡献开发者更容易地脱离 Violet 框架的演变过程，我设计了一个简单的插件架构。</p>
+
+<p>当然，很多程序都有一个插件架构，其中的很多都说明详尽、实现精巧。当有人建议说 Violet 应该支持 OSGi 的时候，我打了个哆嗦，然后实现了能够让插件机制工作的最简单的事情。</p>
+
+<p>贡献开发者只需要生成一个包含了图形、节点和边的实现的 JAR 文件，并把它放到 <code>plugins</code> 目录中。当 Violet 启动时，它会用 Java 的 <code>ServiceLoader</code>（服务加载器）类加载这些插件。<code>ServiceLoader</code> 类是用来加载像 JDBC 驱动这样的服务的。<code>ServiceLoader</code> 会加载那些能够对指定接口提供实现的 JAR 文件（比如这里的 <code>Graph</code> 接口）。</p>
+
+<p>每个 JAR 文件必须包含一个名为 <code>META-INF/services</code> 的子目录，该目录中需要包含一个以相应接口的全称命名的文件（比如 <code>com.horstmann.violet.Graph</code>），文件内容是实现了这一接口的所有类的名字，每行一个。<code>ServiceLoader</code> 会为插件目录构造一个类加载器（class loader），并加载所有的插件：</p>
+
+<pre><code>ServiceLoader&lt;Graph&gt; graphLoader = ServiceLoader.load(Graph.class, classLoader);
+for (Graph g : graphLoader) // ServiceLoader&lt;Graph&gt;实现了Iterable&lt;Graph&gt;这个接口
+  registerGraph(g);
+</code></pre>
+
+<p>这是标准 Java 中的一个简单而实用的设施；你或许会在你自己的项目中发现它的价值。</p>
+
+<h2 id="">22.10. 总结</h2>
+
+<p>和很多开源项目一样，Violet 诞生于未被满足的需求，即以最小的混乱代价，来绘制简单的 UML 图。Java SE 平台令人惊奇的广泛应用成就了 Violet。同时，Violet 也利用了该平台中的很多技术。在这篇文章中，我描述了 Violet 如何利用 JavaBeans、长期的持久化、Java WebStart、Java 2D、Swing 撤消和重做，以及服务加载器设施。这些技术并不总是和基础的 Java 及 Swing 一样容易被人理解，但它们可以极大地简化桌面应用程序的架构。它们让我能够在最开始作为一个独立的开发者，在几个月的业余时间里创建出一个成功的应用程序。依赖这些标准的机制，也让其他人改进 Violet，或是从中提取一些片段利用在他们自己的项目中，变得更加容易。</p>
+</div><footer class="entry-meta">This entry was posted on <a href="http://blog.xiao-jia.com/2012/08/27/violet/" rel="bookmark"><time class="entry-date" pubdate>August 7, 2012</time></a><span class="by-author"> by <span class="author vcard"><a class="url fn n" href="http://blog.xiao-jia.com" rel="author">Xiao Jia</a></span></span>&nbsp;&middot;&nbsp;<a href="http://blog.xiao-jia.com/tag/工程/">工程</a>&nbsp;&middot;&nbsp;<a href="http://blog.xiao-jia.com/tag/翻译/">翻译</a></footer></article></div>
+      </div><!-- #primary -->
+      <div id="secondary" class="widget-area" role="complementary"><aside id="recent-posts" class="widget widget_recent_entries"><h3 class="widget-title">Recent Posts</h3><ul><li><a href="http://blog.xiao-jia.com/2012/08/27/violet/"> Violet (The Architecture of Open Source Applications, Volume I)</a></li><ul></aside><aside id="archives" class="widget widget_archive"><h3 class="widget-title">Archives</h3><ul><li><a href="http://blog.xiao-jia.com/2012/08/" title="August 2012">August 2012</a></li></ul></aside><aside id="categories" class="widget widget_categories"><h3 class="widget-title">Tags</h3><ul><li class="cat-item"><a href="http://blog.xiao-jia.com/tag/工程/">工程</a></li><li class="cat-item"><a href="http://blog.xiao-jia.com/tag/翻译/">翻译</a></li></ul></aside></div>
+    </div><!-- #main .wrapper -->
+    <footer id="colophon" role="contentinfo">
+      <div class="site-info">
+        Copyright &copy; 2012 <a href="http://blog.xiao-jia.com">Xiao Jia</a> &middot;
+        Themed by <a href="http://theme.wordpress.com/themes/twentytwelve/">Twenty Twelve</a> &middot;
+        Powered by <a href="https://github.com/stfairy/markpress" rel="generator">markpress</a>
+      </div><!-- .site-info -->
+    </footer><!-- #colophon -->
+  </div><!-- #page -->
+</body>
+</html>
