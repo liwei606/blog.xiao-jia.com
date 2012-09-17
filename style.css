@@ -575,9 +575,11 @@ section[role="banner"] {
 }
 .widget-area .widget a {
 	color: #777;
+  text-decoration: none;
 }
 .widget-area .widget a:hover {
 	color: #21759b;
+  text-decoration: underline;
 }
 
 /* Footer */
