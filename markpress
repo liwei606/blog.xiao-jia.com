@@ -141,8 +141,8 @@ function append_post_begin_tag {
 }
 function append_post_header {
   append '<header class="entry-header">'
-    append "<h1 class=\"entry-title\"><a href=\"{{ blog.url }}/${path}\" rel=\"bookmark\">${title}</a></h1>"
     append "<a class=\"comments-link\" href=\"{{ blog.url }}/${path}#disqus_thread\">Comments</a>"
+    append "<h1 class=\"entry-title\"><a href=\"{{ blog.url }}/${path}\" rel=\"bookmark\">${title}</a></h1>"
   append '</header>'
 }
 function append_post_content {
