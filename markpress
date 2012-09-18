@@ -142,6 +142,7 @@ function append_post_begin_tag {
 function append_post_header {
   append '<header class="entry-header">'
     append "<h1 class=\"entry-title\"><a href=\"{{ blog.url }}/${path}\" rel=\"bookmark\">${title}</a></h1>"
+    append "<a class=\"comments-link\" href=\"{{ blog.url }}/${path}#disqus_thread\">Comments</a>"
   append '</header>'
 }
 function append_post_content {
@@ -167,6 +168,12 @@ function append_post_footer {
 }
 function append_post_end_tag {
   append '</article>'
+}
+function append_disqus_embed_js {
+  append "<script src=\"http://${disqus_id}.disqus.com/embed.js\"></script>"
+}
+function append_disqus_count_js {
+  append "<script src=\"http://${disqus_id}.disqus.com/count.js\"></script>"
 }
 ########################################
 # Configuration extraction:
@@ -291,6 +298,7 @@ for file in `find _posts -name "*.md" | sort -r`; do
     append_post_footer
   append_post_end_tag
 done
+append_disqus_count_js
 build_page_content
 page_title='Home'
 build_page_with_template
@@ -328,6 +336,7 @@ for archive_path in `cat tmp/archive_paths | sort | uniq`; do
   year=${archive_path:0:4}
   month=${archive_path:5:2}
   build_readable_month $month
+  append_disqus_count_js
   build_page_content
   page_title="Archive: ${readable_month} ${year}"
   build_page_with_template
@@ -347,7 +356,8 @@ for file in `find _posts -name "*.md"`; do
     append_post_footer
   append_post_end_tag
   append '<div id="disqus_thread"></div>'
-  append "<script src=\"http://${disqus_id}.disqus.com/embed.js\"></script>"
+  append_disqus_embed_js
+  append_disqus_count_js
   build_page_content
   page_title=$title
   build_page_with_template
@@ -387,6 +397,7 @@ for slug in `ls tag`; do
   tag=$(cat "tmp/tag/${slug}")
   echo "<url><loc>${blog_url}/tag/${slug}/</loc></url>" >> sitemap.xml
   index="tag/${slug}/index.html"
+  append_disqus_count_js
   build_page_content
   page_title='Tag: '$tag
   build_page_with_template
@@ -408,6 +419,9 @@ for file in `find _pages -name "*.md"`; do
     append_post_header
     append_post_content 3
   append_post_end_tag
+  append '<div id="disqus_thread"></div>'
+  append_disqus_embed_js
+  append_disqus_count_js
   #
   build_page_content
   page_title=$title
