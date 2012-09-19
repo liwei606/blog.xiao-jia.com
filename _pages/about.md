@@ -12,13 +12,13 @@ title: About
 
 学生、非专业软件开发者、业余科研工作者、程序语言爱好者
 
-高中时未潜心学习数学，终因信息学竞赛保送，未曾参加过NOI
+高中时未潜心学习数学，终因信息学竞赛保送，未曾参加过 NOI
 
 大学时竞赛之途中断，潜心学习数学未果，终探索各种语言和技术
 
-弃用Windows若干年，曾倾心于Linux，后摇身一变成为Mac用户
+弃用 Windows 若干年，倾心于 Linux，偶然成为 Mac 用户
 
-原Vim爱好者，现TextMate使用者；原Gmail爱好者，现Outlook使用者
+Vim 爱好者，TextMate 使用者
 
 个人主页：http://xiao-jia.com/
 
