@@ -1,10 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>http://blog.xiao-jia.com/</loc></url>
+<url><loc>http://blog.xiao-jia.com/2009/04/</loc></url>
 <url><loc>http://blog.xiao-jia.com/2012/04/</loc></url>
 <url><loc>http://blog.xiao-jia.com/2012/08/</loc></url>
 <url><loc>http://blog.xiao-jia.com/2012/09/</loc></url>
 <url><loc>http://blog.xiao-jia.com/2012/08/27/violet/</loc></url>
+<url><loc>http://blog.xiao-jia.com/2009/04/28/crazy-programmer/</loc></url>
 <url><loc>http://blog.xiao-jia.com/2012/04/20/sudoku/</loc></url>
 <url><loc>http://blog.xiao-jia.com/2012/04/19/initial-commit/</loc></url>
 <url><loc>http://blog.xiao-jia.com/2012/09/17/two-weeks-sg/</loc></url>
@@ -13,9 +15,11 @@
 <url><loc>http://blog.xiao-jia.com/tag/singapore/</loc></url>
 <url><loc>http://blog.xiao-jia.com/tag/好玩的/</loc></url>
 <url><loc>http://blog.xiao-jia.com/tag/工程/</loc></url>
+<url><loc>http://blog.xiao-jia.com/tag/很久以前/</loc></url>
 <url><loc>http://blog.xiao-jia.com/tag/故事/</loc></url>
 <url><loc>http://blog.xiao-jia.com/tag/未分类/</loc></url>
 <url><loc>http://blog.xiao-jia.com/tag/翻译/</loc></url>
+<url><loc>http://blog.xiao-jia.com/tag/读书笔记/</loc></url>
 <url><loc>http://blog.xiao-jia.com/tag/零知识证明/</loc></url>
 <url><loc>http://blog.xiao-jia.com/about/</loc></url>
 </urlset>
