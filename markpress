@@ -189,10 +189,10 @@ function append_post_end_tag {
   append '</article>'
 }
 function append_disqus_embed_js {
-  append "<script src=\"http://${disqus_id}.disqus.com/embed.js\"></script>"
+  append "<script async=\"async\" src=\"http://${disqus_id}.disqus.com/embed.js\"></script>"
 }
 function append_disqus_count_js {
-  append "<script src=\"http://${disqus_id}.disqus.com/count.js\"></script>"
+  append "<script async=\"async\" src=\"http://${disqus_id}.disqus.com/count.js\"></script>"
 }
 ########################################
 # Configuration extraction:
