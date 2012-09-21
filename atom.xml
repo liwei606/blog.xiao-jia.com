@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+<id>http://blog.xiao-jia.com/atom.xml</id>
+<title>随便想想</title>
+<updated>2012-09-21T15:53:22Z</updated>
+<link rel="self" href="http://blog.xiao-jia.com/atom.xml" type="application/atom+xml"/>
+<author><name>Xiao Jia</name><uri>http://blog.xiao-jia.com</uri></author>
+<entry>
+<title> 听阿磊讲故事</title>
+<category term="好玩的"/>
+<category term="故事"/>
+<id>http://blog.xiao-jia.com/2012/09/21/liangalei-stories/</id>
+<updated>2012-09-21T15:53:22Z</updated>
+<link href="http://blog.xiao-jia.com/2012/09/21/liangalei-stories/"/>
+</entry>
+<entry>
+<title> @sg (1)</title>
+<category term="singapore"/>
+<category term="life"/>
+<id>http://blog.xiao-jia.com/2012/09/17/two-weeks-sg/</id>
+<updated>2012-09-17T17:57:27Z</updated>
+<link href="http://blog.xiao-jia.com/2012/09/17/two-weeks-sg/"/>
+</entry>
+<entry>
+<title> Why Erlang internals are undocumented</title>
+<category term="Erlang"/>
+<id>http://blog.xiao-jia.com/2012/09/07/undocumented-erlang-internals/</id>
+<updated>2012-09-07T19:02:00Z</updated>
+<link href="http://blog.xiao-jia.com/2012/09/07/undocumented-erlang-internals/"/>
+</entry>
+<entry>
+<title> Violet (The Architecture of Open Source Applications, Volume I)</title>
+<category term="工程"/>
+<category term="翻译"/>
+<id>http://blog.xiao-jia.com/2012/08/27/violet/</id>
+<updated>2012-08-27T12:34:56Z</updated>
+<link href="http://blog.xiao-jia.com/2012/08/27/violet/"/>
+</entry>
+<entry>
+<title> 零知识证明：数独</title>
+<category term="零知识证明"/>
+<id>http://blog.xiao-jia.com/2012/04/20/sudoku/</id>
+<updated>2012-04-20T11:41:00Z</updated>
+<link href="http://blog.xiao-jia.com/2012/04/20/sudoku/"/>
+</entry>
+<entry>
+<title> Initial commit</title>
+<category term="未分类"/>
+<id>http://blog.xiao-jia.com/2012/04/19/initial-commit/</id>
+<updated>2012-04-19T22:34:00Z</updated>
+<link href="http://blog.xiao-jia.com/2012/04/19/initial-commit/"/>
+</entry>
+<entry>
+<title> 《疯狂的程序员》经典语句摘抄</title>
+<category term="很久以前"/>
+<category term="读书笔记"/>
+<id>http://blog.xiao-jia.com/2009/04/28/crazy-programmer/</id>
+<updated>2009-04-28T17:03:00Z</updated>
+<link href="http://blog.xiao-jia.com/2009/04/28/crazy-programmer/"/>
+</entry>

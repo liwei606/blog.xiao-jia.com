@@ -17,6 +17,7 @@ echo '##############################################################'
 #   http://www.cyberciti.biz/tips/bash-shell-parameter-substitution-2.html
 #
 # Generate:
+#   /atom.xml
 #   /sitemap.xml
 #   /index.html
 #   /:year/:month/index.html
@@ -136,6 +137,24 @@ function build_archive_slug_and_slot {
   archive_slug="${year}/${month}/"
   archive_slot="${readable_month} ${year}"
 }
+function build_updated_timestamp {
+  datetime=$(head -n 3 $1 | grep -P '^(date|time):' | grep -o -P '(?<=:).+' | tr -d ' ')
+  # datetime = 2012-08-2712:34:56
+  updated_timestamp="${datetime:0:10}T${datetime:10:8}Z"
+}
+function append_post_atom_feed {
+  echo "<entry>" >> atom.xml
+  echo "<title>${title}</title>" >> atom.xml
+  head -n 3 $file | grep -P '^tags?:' | grep -o -P '(?<=:).+' | # tags
+  tr "," "\n" | while read tag; do
+    echo "<category term=\"${tag}\"/>" >> atom.xml
+  done
+  echo "<id>${blog_url}/${path}</id>" >> atom.xml
+  build_updated_timestamp $file
+  echo "<updated>${updated_timestamp}</updated>" >> atom.xml
+  echo "<link href=\"${blog_url}/${path}\"/>" >> atom.xml
+  echo "</entry>" >> atom.xml
+}
 function append_post_begin_tag {
   append '<article class="post type-post status-publish format-standard hentry">'
 }
@@ -191,8 +210,11 @@ max_recent_posts=5
 rm -rf tmp/
 mkdir tmp/
 #
-echo "<?xml version='1.0' encoding='UTF-8'?>" > sitemap.xml
-echo "<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>" >> sitemap.xml
+echo "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" > atom.xml
+echo "<feed xmlns=\"http://www.w3.org/2005/Atom\">" >> atom.xml
+#
+echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" > sitemap.xml
+echo "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">" >> sitemap.xml
 ########################################
 # Recent posts:
 #---------------------------------------
@@ -281,17 +303,26 @@ done
 ########################################
 # /index.html
 #---------------------------------------
+echo "<id>${blog_url}/atom.xml</id>" >> atom.xml
+echo "<title>${blog_title}</title>" >> atom.xml
 echo "<url><loc>${blog_url}/</loc></url>" >> sitemap.xml
 index="index.html"
 rm -f $index
 let i=0
 for file in `find _posts -name "*.md" | sort -r`; do
   let i=i+1
+  if [ $i = 1 ]; then
+    build_updated_timestamp $file
+    echo "<updated>${updated_timestamp}</updated>" >> atom.xml
+    echo "<link rel=\"self\" href=\"${blog_url}/atom.xml\" type=\"application/atom+xml\"/>" >> atom.xml
+    echo "<author><name>${blog_author}</name><uri>${blog_url}</uri></author>" >> atom.xml
+  fi
   if [ $i -gt $posts_on_homepage ]; then
     break
   fi
   build_post_path $file
   build_post_title $file
+  append_post_atom_feed
   append_post_begin_tag
     append_post_header
     append_post_content 5
@@ -347,7 +378,7 @@ done
 for file in `find _posts -name "*.md"`; do
   build_post_path $file
   build_post_title $file
-  echo "<url><loc>${blog_url}/${path}</loc></url>" >> sitemap.xml
+  echo "<url><loc>${blog_url}/${path}</loc><lastmod>${file:7:10}</lastmod></url>" >> sitemap.xml
   index="${path}index.html"
   mkdir -p $path
   append_post_begin_tag
