@@ -1,4 +1,4 @@
-title: Why Erlang internals are undocumented (by Joe Armstrong)
+title: Why Erlang internals are undocumented
 tag: Erlang
 time: 2012-09-07 19:02:00
 
