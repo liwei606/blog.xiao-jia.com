@@ -74,9 +74,8 @@ function build_page_with_template {
   sed -i -e "s/{{ blog.url }}/${blog_url//\//\\/}/g" $index
 }
 function build_readable_month {
-  local month
-  let month=10#$1
-  case $month in
+  let dec_month=10#$1
+  case $dec_month in
   1)
     readable_month='January'
     ;;
@@ -114,7 +113,7 @@ function build_readable_month {
     readable_month='December'
     ;;
   *)
-    echo "unrecognized month: ${month}"
+    echo "unrecognized month: ${dec_month}"
   esac
 }
 function build_readable_date {
@@ -123,9 +122,10 @@ function build_readable_date {
   local month
   month=${1:5:2}
   local day
-  day=${1:9:2}
+  day=${1:8:2}
+  let dec_day=10#$day
   build_readable_month $month
-  readable_date="${readable_month} ${day}, ${year}"
+  readable_date="${readable_month} ${dec_day}, ${year}"
 }
 function build_archive_slug_and_slot {
   local year
