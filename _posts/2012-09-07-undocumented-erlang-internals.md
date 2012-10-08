@@ -1,5 +1,5 @@
 title: Why Erlang internals are undocumented
-tag: Erlang
+tag: erlang
 time: 2012-09-07 19:02:00
 
 I think it works like this:
