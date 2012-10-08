@@ -247,7 +247,8 @@ append '<aside id="archives" class="widget widget_archive">'
     build_archive_slug_and_slot ${file:7:7}
     if [ ! -d tmp/archives/${archive_slug} ]; then
       mkdir -p tmp/archives/${archive_slug}
-      append "<li><a href=\"{{ blog.url }}/${archive_slug}\" title=\"${archive_slot}\">${archive_slot}</a></li>"
+      let archive_count=$(find _posts -name "${archive_slug:0:4}-${archive_slug:5:2}-*.md" | wc -l)
+      append "<li><a href=\"{{ blog.url }}/${archive_slug}\" title=\"${archive_slot}\">${archive_slot} (${archive_count})</a></li>"
     fi
   done
   append '</ul>'
