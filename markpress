@@ -203,7 +203,7 @@ blog_title=$(grep -o -P '(?<=title:\s).+' _config.yml)
 blog_author=$(grep -o -P '(?<=author:\s).+' _config.yml)
 disqus_id=$(grep -o -P '(?<=disqus:\s).+' _config.yml)
 #
-posts_on_homepage=7
+posts_on_homepage=5
 max_recent_posts=5
 ########################################
 # Preparations:
