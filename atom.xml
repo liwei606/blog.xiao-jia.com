@@ -2,9 +2,17 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 <id>http://blog.xiao-jia.com/atom.xml</id>
 <title>随便想想</title>
-<updated>2012-10-08T13:44:00Z</updated>
+<updated>2012-10-10T22:32:32Z</updated>
 <link rel="self" href="http://blog.xiao-jia.com/atom.xml" type="application/atom+xml"/>
 <author><name>Xiao Jia</name><uri>http://blog.xiao-jia.com</uri></author>
+<entry>
+<title> 萌节</title>
+<category term="singapore"/>
+<category term="life"/>
+<id>http://blog.xiao-jia.com/2012/10/10/meng/</id>
+<updated>2012-10-10T22:32:32Z</updated>
+<link href="http://blog.xiao-jia.com/2012/10/10/meng/"/>
+</entry>
 <entry>
 <title> @sg (2)</title>
 <category term="singapore"/>
@@ -51,11 +59,4 @@
 <id>http://blog.xiao-jia.com/2012/04/20/sudoku/</id>
 <updated>2012-04-20T11:41:00Z</updated>
 <link href="http://blog.xiao-jia.com/2012/04/20/sudoku/"/>
-</entry>
-<entry>
-<title> Initial commit</title>
-<category term="未分类"/>
-<id>http://blog.xiao-jia.com/2012/04/19/initial-commit/</id>
-<updated>2012-04-19T22:34:00Z</updated>
-<link href="http://blog.xiao-jia.com/2012/04/19/initial-commit/"/>
 </entry>
