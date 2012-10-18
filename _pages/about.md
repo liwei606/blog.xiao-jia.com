@@ -20,5 +20,5 @@ title: About
 
 Vim 爱好者，TextMate 使用者
 
-个人主页：http://xiao-jia.com/
+个人主页：[xiao-jia.com](http://xiao-jia.com/)
 
