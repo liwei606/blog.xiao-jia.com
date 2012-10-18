@@ -49,8 +49,11 @@
     <div id="main" class="wrapper">
       <div id="primary" class="site-content">
         <div id="content" role="main">{{ page.content }}</div>
-      </div><!-- #primary -->
-      <div id="secondary" class="widget-area" role="complementary">{{ page.sidebar }}</div>
+      </div>
+      <div id="secondary" class="widget-area" role="complementary">
+        <aside class="widget"><a href="http://xiao-jia.com/">Homepage of Xiao Jia</a></aside>
+        {{ page.sidebar }}
+      </div>
     </div><!-- #main .wrapper -->
     <footer id="colophon" role="contentinfo">
       <div class="site-info">
