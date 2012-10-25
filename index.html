@@ -48,7 +48,64 @@
     </header><!-- #masthead -->
     <div id="main" class="wrapper">
       <div id="primary" class="site-content">
-        <div id="content" role="main"><article class="post type-post status-publish format-standard hentry"><header class="entry-header"><h1 class="entry-title"><a href="http://blog.xiao-jia.com/2012/10/22/at-singapore-3/" rel="bookmark"> @sg (3)</a></h1></header><div class="entry-content"><p>一转眼十月份都要过去了，坡上的天气似乎低了一度两度的，大约是下雨下的吧。上周赶上若干次大雨，有一次下的是倾盆大雨，真是下尿了。感觉生活在热带雨林里的猴子们真不容易啊。</p>
+        <div id="content" role="main"><article class="post type-post status-publish format-standard hentry"><header class="entry-header"><h1 class="entry-title"><a href="http://blog.xiao-jia.com/2012/10/25/ubuntu-server-12.10-xfce4-skype-bluez/" rel="bookmark"> 因为 bluez 不能安装 Skype</a></h1></header><div class="entry-content"><p>今天在 Ubuntu Server 12.10 (64 bit) 下面装 Skype，从官网下了 deb 包之后，怎么也装不上：</p>
+
+<pre><code>$ sudo dpkg -i skype-ubuntu_4.0.0.8-1_amd64.deb 
+Selecting previously unselected package skype.
+(Reading database ... 250805 files and directories currently installed.)
+Unpacking skype (from skype-ubuntu_4.0.0.8-1_amd64.deb) ...
+dpkg: dependency problems prevent configuration of skype:
+ skype depends on ia32-libs; however:
+  Package ia32-libs is not installed.
+
+dpkg: error processing skype (--install):
+ dependency problems - leaving unconfigured
+Processing triggers for desktop-file-utils ...
+Errors were encountered while processing:
+ skype
+</code></pre>
+
+<p>上面这个错误只是多次尝试中的冰山一角。<code>ia32-libs</code> 依赖于 <code>ia32-libs-multiarch</code>，进而依赖于 <code>bluez-alsa:i386</code>，最后依赖于 <code>bluez</code>。究其原因，就是 <code>bluez</code> 装不上：</p>
+
+<pre><code>$ sudo apt-get install bluez
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+Suggested packages:
+  bluez-hcidump
+The following NEW packages will be installed:
+  bluez
+0 upgraded, 1 newly installed, 0 to remove and 0 not upgraded.
+Need to get 0 B/985 kB of archives.
+After this operation, 2,567 kB of additional disk space will be used.
+Selecting previously unselected package bluez.
+(Reading database ... 253342 files and directories currently installed.)
+Unpacking bluez (from .../bluez_4.101-0ubuntu6_amd64.deb) ...
+Processing triggers for man-db ...
+Processing triggers for ureadahead ...
+Setting up bluez (4.101-0ubuntu6) ...
+reload: Unknown instance: 
+invoke-rc.d: initscript dbus, action &quot;force-reload&quot; failed.
+start: Job failed to start
+invoke-rc.d: initscript bluetooth, action &quot;start&quot; failed.
+dpkg: error processing bluez (--configure):
+ subprocess installed post-installation script returned error exit status 1
+Processing triggers for ureadahead ...
+Errors were encountered while processing:
+ bluez
+E: Sub-process /usr/bin/dpkg returned an error code (1)
+</code></pre>
+
+<p>Google 了一下，毫无头绪，好不容易找到一个帖子，试了一下，果然就行了：</p>
+
+<pre><code>$ sudo mv /usr/sbin/bluetoothd /usr/sbin/bluetoothd-backup
+$ sudo ln -s /bin/true /usr/sbin/bluetoothd
+</code></pre>
+
+<p>之后再重新安装 <code>bluez</code> 就可以了，因为 <code>/usr/sbin/bluetoothd</code> 已经是 <code>/bin/true</code> 了。</p>
+
+<p>之前都没有遇到这个问题，不知道这次是为什么，可能是 12.10 的缘故吧。先记在这里，万一有人遇到同样的问题也能快点解决。</p>
+</div><footer class="entry-meta">This entry was posted on <a href="http://blog.xiao-jia.com/2012/10/25/ubuntu-server-12.10-xfce4-skype-bluez/" rel="bookmark"><time class="entry-date" pubdate>October 25, 2012</time></a><span class="by-author"> by <span class="author vcard"><a class="url fn n" href="http://blog.xiao-jia.com" rel="author">Xiao Jia</a></span></span>&nbsp;&middot;&nbsp;<a href="http://blog.xiao-jia.com/tag/ubuntu/">ubuntu</a>&nbsp;&middot;&nbsp;<a href="http://blog.xiao-jia.com/tag/skype/">skype</a>&nbsp;&middot;&nbsp;<a href="http://blog.xiao-jia.com/tag/bluez/">bluez</a></footer></article><article class="post type-post status-publish format-standard hentry"><header class="entry-header"><h1 class="entry-title"><a href="http://blog.xiao-jia.com/2012/10/22/at-singapore-3/" rel="bookmark"> @sg (3)</a></h1></header><div class="entry-content"><p>一转眼十月份都要过去了，坡上的天气似乎低了一度两度的，大约是下雨下的吧。上周赶上若干次大雨，有一次下的是倾盆大雨，真是下尿了。感觉生活在热带雨林里的猴子们真不容易啊。</p>
 
 <p>上周还在调程序，Erlang 初学者就是不给力。周四晚上同学过生日，去了一次 UTown。这是我第一次去 UTown，感觉建的还挺好的，只是搞不清楚一个住的地方搞这么繁华干嘛。我去过几次新加坡政府建的楼房，楼道特别狭窄，光线昏暗，电梯空间也很小，感觉十分不适宜居住的样子。我住在 WEST COAST
 GARDENS，都是自己盖的小房子，一个挨着一个的。每天早些时候，可以看到男主人们开着名车离家，白天可以看到年轻漂亮的女主人们在自家的院子里摆弄花草，晚上就只有看门狗趴着睡觉，时不时起来叫几声。周末不在学校吃饭，看到周围吃饭的都是老年人，很难找到同龄人的身影。这种感觉十分奇怪；我所看到的生活节奏也很让人无所适从。</p>
@@ -308,62 +365,11 @@ Mall，吃了一份日本牛肉，味道还不错。吃过饭之后去超市买�
 法庭不是法律课……</p>
 
 <p>（还有一些，以后想起来再补充……）</p>
-</div><footer class="entry-meta">This entry was posted on <a href="http://blog.xiao-jia.com/2012/09/21/liangalei-stories/" rel="bookmark"><time class="entry-date" pubdate>September 21, 2012</time></a><span class="by-author"> by <span class="author vcard"><a class="url fn n" href="http://blog.xiao-jia.com" rel="author">Xiao Jia</a></span></span>&nbsp;&middot;&nbsp;<a href="http://blog.xiao-jia.com/tag/好玩的/">好玩的</a>&nbsp;&middot;&nbsp;<a href="http://blog.xiao-jia.com/tag/故事/">故事</a></footer></article><article class="post type-post status-publish format-standard hentry"><header class="entry-header"><h1 class="entry-title"><a href="http://blog.xiao-jia.com/2012/09/17/two-weeks-sg/" rel="bookmark"> @sg (1)</a></h1></header><div class="entry-content"><p>不知不觉，来新加坡已经半个多月了。
-也没有什么特别的感触；就好像上大学，到了一个新的地方，熟悉这里的生活，融入这里的生活，就好了。
-到一个新的地方，无非也就是风土人情、衣食住行。</p>
-
-<p>新加坡的环境不错，绿化很好，人也不多。
-白天在路上走，也很容易找到遮阳的地方。
-不过感觉道路规划比较奇怪，NUS 里面的山坡也很坑爹。
-来之前以为有机会锻炼英语了，来了之后才发现 singlish 没啥好学习的，吃饭也会有人主动问“你要吃什么”。</p>
-
-<p>坡上四季如夏，每天穿的都是短袖、短裤、凉鞋。
-所以见到“不抽烟，少喝酒，天然发型，素色T恤或衬衣，休闲皮凉鞋”，不一定就是程序员。
-这里的天气其实并不算很热，和上海夏天的平均温度差不多吧。
-但室内常年开着空调，每次回到楼里都觉得很冷。
-于是在实验室备了一件长袖，但目前为止还没用上。
-来了之后赶上一次下雨，下着下着就没了，丝毫没有出现“交大游泳池”的迹象。
-每天最晒的时候，应该是下午一两点的时候，我只经历过一次，此后就一直躲在屋里了。</p>
-
-<p>然后说吃饭。
-来了之后出去吃了一顿川菜、一顿烤鱼、一顿螃蟹，其他都是在食堂之类的地方解决。
-川菜和烤鱼没什么不一样，螃蟹倒是别有风味，个头大，最特别的是钳子里的肉非常多。
-在食堂等地方呢，就吃些普通的饭啊菜啊、馄饨啊饺子啊，目前为止还没吃过别样风味的菜品。
-不过有一个问题，就是菜特别少，肉特别多。
-来了之后只吃到过油菜和生菜，以及白菜叶类似物。
-胡萝卜如果算菜的话就算进去好了。
-相比肉类的丰富，蔬菜的缺少实在不能忍受。
-上次吃碗牛肉面，居然还把花椒叶嚼了半天。
-吃不到菜，就只能用水果来弥补。
-但大街上只能看到卖榴莲的，苹果只在超市里找到了，还是从中国运过来的。</p>
-
-<p>住的地方是一个三层小楼，我们三个人住在二楼的一间屋子里。
-周围环境还不错，很安静，交通也还算方便。
-据说我来之前可以看到蟑螂，不过来之后还没有遇到过。
-据说寝室那边蟑螂已经泛滥了，不知道回去之后会是什么样子。
-我离开学校之前，就已经每天在和蟑螂斗智斗勇了。</p>
-
-<p>每天上班是坐公交车，到站之后就在校园里，走路不到十分钟就到实验室了。
-这里公交是不报站的，乘客自己觉得快到站了就按铃，不然的话车就开过去了。
-还好我每天上下车的两个站点都不算冷门，所以还没有坐过站的经历。
-不过最开始不太熟悉学校里的环境，经常还没到站的时候就下车了，然后就要徒步熟悉各种坡度。
-地铁的话，不经常坐，跟上海也没啥差别。</p>
-
-<p>最后，上班和上学，感觉真是很不一样的。
-特别是，别人还在上学的时候来上班，感觉就更不一样了。
-不用上课，又没人查岗，每天就是坐在电脑前面，“做研究”。
-回家也没什么特别的事情，累的时候就躺下，过一会儿再坐起来打字。
-上班和下班的区别，就是写的程序内容不一样，但正在做的事情基本上都是写程序。
-半个月，有了充足的时间打磨自己，隐约觉得有些进步，至少 vim 用得更熟练了。
-略坑爹的是，戴尔的键盘满天下，虽然半个月已经熟悉了，可还是感觉键程太长，手指疲乏。</p>
-
-<p>嗯，就写这么多吧。
-自从语文不及格以来，写文章的能力越来越差，和码农功夫此消彼涨，甚是捉急啊。</p>
-</div><footer class="entry-meta">This entry was posted on <a href="http://blog.xiao-jia.com/2012/09/17/two-weeks-sg/" rel="bookmark"><time class="entry-date" pubdate>September 17, 2012</time></a><span class="by-author"> by <span class="author vcard"><a class="url fn n" href="http://blog.xiao-jia.com" rel="author">Xiao Jia</a></span></span>&nbsp;&middot;&nbsp;<a href="http://blog.xiao-jia.com/tag/singapore/">singapore</a>&nbsp;&middot;&nbsp;<a href="http://blog.xiao-jia.com/tag/life/">life</a></footer></article></div>
+</div><footer class="entry-meta">This entry was posted on <a href="http://blog.xiao-jia.com/2012/09/21/liangalei-stories/" rel="bookmark"><time class="entry-date" pubdate>September 21, 2012</time></a><span class="by-author"> by <span class="author vcard"><a class="url fn n" href="http://blog.xiao-jia.com" rel="author">Xiao Jia</a></span></span>&nbsp;&middot;&nbsp;<a href="http://blog.xiao-jia.com/tag/好玩的/">好玩的</a>&nbsp;&middot;&nbsp;<a href="http://blog.xiao-jia.com/tag/故事/">故事</a></footer></article></div>
       </div>
       <div id="secondary" class="widget-area" role="complementary">
         <aside class="widget"><a href="http://xiao-jia.com/">Homepage of Xiao Jia</a></aside>
-        <aside id="recent-posts" class="widget widget_recent_entries"><h3 class="widget-title">Recent Posts</h3><ul><li><a href="http://blog.xiao-jia.com/2012/10/22/at-singapore-3/"> @sg (3)</a></li><li><a href="http://blog.xiao-jia.com/2012/10/10/meng/"> 萌节</a></li><li><a href="http://blog.xiao-jia.com/2012/10/08/one-month-sg/"> @sg (2)</a></li><li><a href="http://blog.xiao-jia.com/2012/09/21/liangalei-stories/"> 听阿磊讲故事</a></li><li><a href="http://blog.xiao-jia.com/2012/09/17/two-weeks-sg/"> @sg (1)</a></li><ul></aside><aside id="archives" class="widget widget_archive"><h3 class="widget-title">Archives</h3><ul><li><a href="http://blog.xiao-jia.com/2012/10/" title="October 2012">October 2012 (3)</a></li><li><a href="http://blog.xiao-jia.com/2012/09/" title="September 2012">September 2012 (3)</a></li><li><a href="http://blog.xiao-jia.com/2012/08/" title="August 2012">August 2012 (1)</a></li><li><a href="http://blog.xiao-jia.com/2012/04/" title="April 2012">April 2012 (2)</a></li><li><a href="http://blog.xiao-jia.com/2009/04/" title="April 2009">April 2009 (1)</a></li></ul></aside><aside id="categories" class="widget widget_categories"><h3 class="widget-title">Tags</h3><ul><li class="cat-item"><a href="http://blog.xiao-jia.com/tag/erlang/">erlang</a></li><li class="cat-item"><a href="http://blog.xiao-jia.com/tag/game/">game</a></li><li class="cat-item"><a href="http://blog.xiao-jia.com/tag/life/">life</a></li><li class="cat-item"><a href="http://blog.xiao-jia.com/tag/singapore/">singapore</a></li><li class="cat-item"><a href="http://blog.xiao-jia.com/tag/好玩的/">好玩的</a></li><li class="cat-item"><a href="http://blog.xiao-jia.com/tag/工程/">工程</a></li><li class="cat-item"><a href="http://blog.xiao-jia.com/tag/很久以前/">很久以前</a></li><li class="cat-item"><a href="http://blog.xiao-jia.com/tag/故事/">故事</a></li><li class="cat-item"><a href="http://blog.xiao-jia.com/tag/未分类/">未分类</a></li><li class="cat-item"><a href="http://blog.xiao-jia.com/tag/翻译/">翻译</a></li><li class="cat-item"><a href="http://blog.xiao-jia.com/tag/读书笔记/">读书笔记</a></li><li class="cat-item"><a href="http://blog.xiao-jia.com/tag/零知识证明/">零知识证明</a></li></ul></aside>
+        <aside id="recent-posts" class="widget widget_recent_entries"><h3 class="widget-title">Recent Posts</h3><ul><li><a href="http://blog.xiao-jia.com/2012/10/25/ubuntu-server-12.10-xfce4-skype-bluez/"> 因为 bluez 不能安装 Skype</a></li><li><a href="http://blog.xiao-jia.com/2012/10/22/at-singapore-3/"> @sg (3)</a></li><li><a href="http://blog.xiao-jia.com/2012/10/10/meng/"> 萌节</a></li><li><a href="http://blog.xiao-jia.com/2012/10/08/one-month-sg/"> @sg (2)</a></li><li><a href="http://blog.xiao-jia.com/2012/09/21/liangalei-stories/"> 听阿磊讲故事</a></li><ul></aside><aside id="archives" class="widget widget_archive"><h3 class="widget-title">Archives</h3><ul><li><a href="http://blog.xiao-jia.com/2012/10/" title="October 2012">October 2012 (4)</a></li><li><a href="http://blog.xiao-jia.com/2012/09/" title="September 2012">September 2012 (3)</a></li><li><a href="http://blog.xiao-jia.com/2012/08/" title="August 2012">August 2012 (1)</a></li><li><a href="http://blog.xiao-jia.com/2012/04/" title="April 2012">April 2012 (2)</a></li><li><a href="http://blog.xiao-jia.com/2009/04/" title="April 2009">April 2009 (1)</a></li></ul></aside><aside id="categories" class="widget widget_categories"><h3 class="widget-title">Tags</h3><ul><li class="cat-item"><a href="http://blog.xiao-jia.com/tag/bluez/">bluez</a></li><li class="cat-item"><a href="http://blog.xiao-jia.com/tag/erlang/">erlang</a></li><li class="cat-item"><a href="http://blog.xiao-jia.com/tag/game/">game</a></li><li class="cat-item"><a href="http://blog.xiao-jia.com/tag/life/">life</a></li><li class="cat-item"><a href="http://blog.xiao-jia.com/tag/singapore/">singapore</a></li><li class="cat-item"><a href="http://blog.xiao-jia.com/tag/skype/">skype</a></li><li class="cat-item"><a href="http://blog.xiao-jia.com/tag/ubuntu/">ubuntu</a></li><li class="cat-item"><a href="http://blog.xiao-jia.com/tag/好玩的/">好玩的</a></li><li class="cat-item"><a href="http://blog.xiao-jia.com/tag/工程/">工程</a></li><li class="cat-item"><a href="http://blog.xiao-jia.com/tag/很久以前/">很久以前</a></li><li class="cat-item"><a href="http://blog.xiao-jia.com/tag/故事/">故事</a></li><li class="cat-item"><a href="http://blog.xiao-jia.com/tag/未分类/">未分类</a></li><li class="cat-item"><a href="http://blog.xiao-jia.com/tag/翻译/">翻译</a></li><li class="cat-item"><a href="http://blog.xiao-jia.com/tag/读书笔记/">读书笔记</a></li><li class="cat-item"><a href="http://blog.xiao-jia.com/tag/零知识证明/">零知识证明</a></li></ul></aside>
       </div>
     </div><!-- #main .wrapper -->
     <footer id="colophon" role="contentinfo">

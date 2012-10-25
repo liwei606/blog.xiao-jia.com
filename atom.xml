@@ -2,9 +2,18 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 <id>http://blog.xiao-jia.com/atom.xml</id>
 <title>随便想想</title>
-<updated>2012-10-22T17:45:32Z</updated>
+<updated>2012-10-25T16:27:55Z</updated>
 <link rel="self" href="http://blog.xiao-jia.com/atom.xml" type="application/atom+xml"/>
 <author><name>Xiao Jia</name><uri>http://blog.xiao-jia.com</uri></author>
+<entry>
+<title> 因为 bluez 不能安装 Skype</title>
+<category term="ubuntu"/>
+<category term="skype"/>
+<category term="bluez"/>
+<id>http://blog.xiao-jia.com/2012/10/25/ubuntu-server-12.10-xfce4-skype-bluez/</id>
+<updated>2012-10-25T16:27:55Z</updated>
+<link href="http://blog.xiao-jia.com/2012/10/25/ubuntu-server-12.10-xfce4-skype-bluez/"/>
+</entry>
 <entry>
 <title> @sg (3)</title>
 <category term="singapore"/>
@@ -37,12 +46,4 @@
 <id>http://blog.xiao-jia.com/2012/09/21/liangalei-stories/</id>
 <updated>2012-09-21T15:53:22Z</updated>
 <link href="http://blog.xiao-jia.com/2012/09/21/liangalei-stories/"/>
-</entry>
-<entry>
-<title> @sg (1)</title>
-<category term="singapore"/>
-<category term="life"/>
-<id>http://blog.xiao-jia.com/2012/09/17/two-weeks-sg/</id>
-<updated>2012-09-17T17:57:27Z</updated>
-<link href="http://blog.xiao-jia.com/2012/09/17/two-weeks-sg/"/>
 </entry>
