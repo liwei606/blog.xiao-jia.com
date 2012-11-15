@@ -6,7 +6,7 @@ PLDI 很慌张地 submit 了，感觉又是坐等 reject 的节奏啊。不管�
 
 下一步呢，感觉还是应该先把 Erlang 学习好，就在这里记一下吧。
 
-<erldocs.com> 是一个查找 Erlang 文档的网站，界面要比官方文档华丽一些，不过也很方便，把所有函数都列出来了，并提供了查找功能，可以和 PHP 的文档媲美了。[Learn You Some Erlang](http://learnyousomeerlang.com/) 是一个类似 [Learn You a Haskell](http://learnyouahaskell.com/) 的网站，不过我是最近才知道它的，打算从头到尾看一遍，把一些漏掉的内容补上。
+[erldocs.com](http://erldocs.com/) 是一个查找 Erlang 文档的网站，界面要比官方文档华丽一些，不过也很方便，把所有函数都列出来了，并提供了查找功能，可以和 PHP 的文档媲美了。[Learn You Some Erlang](http://learnyousomeerlang.com/) 是一个类似 [Learn You a Haskell](http://learnyouahaskell.com/) 的网站，不过我是最近才知道它的，打算从头到尾看一遍，把一些漏掉的内容补上。
 
 [eixx](https://github.com/saleyn/eixx) 是一个 Erlang 和 C++ 之间的接口。Erlang 和 C、Java 都有 native 的接口，应该都试一试。还有和 Ruby 之间的 RPC，打算也试一下。不同 Erlang node 之间互相连接，以及不同语言的 node 之间连接，都是很需要时间去耐心理解的。
 
