@@ -1,0 +1,23 @@
+Sitemap: http://blog.xiao-jia.com/sitemap.xml
+
+# Google Image
+User-agent: Googlebot-Image
+Disallow:
+Allow: /*
+
+# Google AdSense
+User-agent: Mediapartners-Google*
+Disallow:
+
+# digg mirror
+User-agent: duggmirror
+Disallow: /
+
+# global
+Disallow: /_*
+Allow: /tag/*
+Allow: /2009/*
+Allow: /2012/*
+Allow: /about/
+Allow: *
+
