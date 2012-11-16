@@ -10,13 +10,13 @@
   <meta name="viewport" content="width=device-width"/>
   <meta name="robots" content="noindex,nofollow"/>
   <meta name="generator" content="markpress"/>
-  <meta name="description" content="Archive: April 2012"/>
+  <meta name="description" content="Tag: git"/>
   <meta property="og:type" content="blog"/>
   <meta property="og:title" content="随便想想"/>
   <meta property="og:url" content="http://blog.xiao-jia.com"/>
-  <meta property="og:description" content="Archive: April 2012"/>
+  <meta property="og:description" content="Tag: git"/>
   <meta property="og:site_name" content="随便想想"/>
-  <title>Archive: April 2012 &middot; 随便想想</title>
+  <title>Tag: git &middot; 随便想想</title>
   <!--[if lt IE 9]>
   <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
@@ -48,27 +48,27 @@
     </header><!-- #masthead -->
     <div id="main" class="wrapper">
       <div id="primary" class="site-content">
-        <div id="content" role="main"><header class="archive-header"><h1 class="archive-title">Monthly Archives: April 2012</h1></header><article class="post type-post status-publish format-standard hentry"><header class="entry-header"><h1 class="entry-title"><a href="http://blog.xiao-jia.com/2012/04/19/initial-commit/" rel="bookmark"> Initial commit</a></h1></header><div class="entry-content"><p>思来想去，觉得还是应该继续写博客。思来想去，却选择了这样一个标题。不过，我将要在这里记叙的，一定不是技术，而是思考或是思维过程，甚至还有些许诡辩和谬误。嗯，“随便想想”嘛。</p>
+        <div id="content" role="main"><header class="archive-header"><h1 class="archive-title">Tag Archives: git</h1></header><article class="post type-post status-publish format-standard hentry"><header class="entry-header"><h1 class="entry-title"><a href="http://blog.xiao-jia.com/2012/11/16/why-prefer-github-over-bitbucket/" rel="bookmark"> Why prefer GitHub over Bitbucket</a></h1></header><div class="entry-content"><p>（这是很久之前整理的，今天发一下）</p>
 
-<p>自上大学以来，就彻底远离了写文章，不仅是我，身边的人大概也是这样。我不清楚，这是该归咎于“快餐文化”的影响，还是源于我们自身成长带来的改变。有句话不是说，“我们都可耻地成熟了”么？</p>
+<ul>
+<li>项目太少，没什么可看的</li>
+<li>没有 inline comments</li>
+<li>没有 gist</li>
+<li>没有 per-project web hosting ，blog.xiao-jia.com 这种就不行</li>
+<li>wiki 编辑器不是等宽字体</li>
+<li>不能在线编辑 source 并 commit</li>
+</ul>
 
-<p>其实不写文章，并不代表没有什么可写的。从我自己来看，不写文章大概是因为时间紧、文笔差、读者少，但平时确实经常会有一些想法，想要以某种方式记录下来。脑子里的东西多半都是转瞬即逝，没能记下来的也就那么没掉了，要是再不开始记的话，就会没掉更多。我觉得人类的进步，很大程度上可以归功于思维的记录。子孙们肯定会和爷爷们遇到同样的问题，如果都重新想一遍的话，世世代代就毫无区别了。只有前人把这些思维过程以文字的形式记录下来，后人才能够长久地延续、发展。既然整个人类是这样，一个人也应该是这样的吧。记下自己点点滴滴的思绪，作为一种积累，算是件很有意义的事吧？</p>
-</div><footer class="entry-meta">This entry was posted on <a href="http://blog.xiao-jia.com/2012/04/19/initial-commit/" rel="bookmark"><time class="entry-date" pubdate>April 19, 2012</time></a><span class="by-author"> by <span class="author vcard"><a class="url fn n" href="http://blog.xiao-jia.com" rel="author">Xiao Jia</a></span></span>&nbsp;&middot;&nbsp;<a href="http://blog.xiao-jia.com/tag/未分类/">未分类</a></footer></article><article class="post type-post status-publish format-standard hentry"><header class="entry-header"><h1 class="entry-title"><a href="http://blog.xiao-jia.com/2012/04/20/sudoku/" rel="bookmark"> 零知识证明：数独</a></h1></header><div class="entry-content"><p>数独是一个非常有趣的游戏，印象里高中时候花了很多时间玩数独。现在的问题是，有一个非常难的数独，A想向B证明A解出了这个数独，但又不想让B知道关于这个解的任何信息。</p>
+<p>但是 Bitbucket 也有 3 个好处</p>
 
-<p>如果可以让B知道解的信息，A可以直接把这个数独的解公开，B则按照数独的规则去检验这个解是否符合要求。如果不能让B知道关于解的任何信息，那么B就只知道数独的规则。</p>
+<ul>
+<li>占有了 xjia 这个用户名</li>
+<li>有无限私有空间</li>
+<li>project 里有界面控制 Username aliases ，可以修正不一致的 commit author</li>
+</ul>
 
-<p>解决这个问题的办法是，A拿写有1&#8211;9的数字卡片各9张，将它们摆在桌面上。对于在数独题面中已经给出数字的格子，直接将卡片写有数字的一面朝上。对于是A解出的那些格子，把卡片写有数字的一面朝下。B也可以看到这个桌面上的卡片，并且按照A的摆放规则，B可以看到这个数独确实是那个非常难的数独。然后，B任意指定一行、一列或者一个3x3大小的方格，A当着B的面，将这选定的9张卡片拿出来，数字朝下并打乱顺序，然后翻开，让B检查。如果A提供的解是正确的话，那么这9张卡片翻开后一定是1&#8211;9这9个数字。如果A并没有解出这个数独，那么这9张卡片翻开后，不一定恰好是1&#8211;9这9个数字。B检查后，A再按照最初的摆放规则，将卡片恢复原位。在这一过程中，B只获知一件事情，就是刚刚指定的9个数字是正确的，而这仅仅是数独规则的一部分。随后，A和B继续这个过程，直至B检查完所有的行、列以及3x3大小的方格。整个过程中，B只是逐渐确信A的确解出了这个数独，但由于每次卡片是混乱着交给B来检查的，所以B并不知道这些卡片对应于解的哪些位置。这样一来，A就向B证明了自己解出了这个数独，同时，B也不知道这个解到底是怎样的。</p>
-
-<p>整个过程中，需要确认一些细节，它们对理解会有帮助：</p>
-
-<ol>
-<li>A展示给B的数独，确实是那个非常难的数独，而不是其他的数独</li>
-<li>每次翻开卡片并放回，都只涉及这9张卡片，这保证了没有在中途更改数独，并且B只能知道这9张是没有问题的</li>
-<li>由于数独一直是同一个，所以B检查完所有行、列以及3x3大小的方格后，就可以确信这个解一定是正确的，同时B也只知道这个解是正确的，而不知道更多信息</li>
-</ol>
-
-<p>这个解决办法，就是<a href="http://baike.baidu.com/view/1228083.htm">零知识证明</a>的一个例子。零知识证明是一个非常有意思的话题，不需要什么背景知识，老少咸宜，如果有可能，我打算多写写这方面的东西。</p>
-</div><footer class="entry-meta">This entry was posted on <a href="http://blog.xiao-jia.com/2012/04/20/sudoku/" rel="bookmark"><time class="entry-date" pubdate>April 20, 2012</time></a><span class="by-author"> by <span class="author vcard"><a class="url fn n" href="http://blog.xiao-jia.com" rel="author">Xiao Jia</a></span></span>&nbsp;&middot;&nbsp;<a href="http://blog.xiao-jia.com/tag/零知识证明/">零知识证明</a></footer></article></div>
+<p>如果 Bitbucket 把周边的功能再做完善一些的话，或许会考虑迁移到上面去。</p>
+</div><footer class="entry-meta">This entry was posted on <a href="http://blog.xiao-jia.com/2012/11/16/why-prefer-github-over-bitbucket/" rel="bookmark"><time class="entry-date" pubdate>November 16, 2012</time></a><span class="by-author"> by <span class="author vcard"><a class="url fn n" href="http://blog.xiao-jia.com" rel="author">Xiao Jia</a></span></span>&nbsp;&middot;&nbsp;<a href="http://blog.xiao-jia.com/tag/git/">git</a>&nbsp;&middot;&nbsp;<a href="http://blog.xiao-jia.com/tag/github/">github</a>&nbsp;&middot;&nbsp;<a href="http://blog.xiao-jia.com/tag/bitbucket/">bitbucket</a></footer></article></div>
       </div>
       <div id="secondary" class="widget-area" role="complementary">
         <aside class="widget"><a href="http://xiao-jia.com/">Homepage of Xiao Jia</a></aside>

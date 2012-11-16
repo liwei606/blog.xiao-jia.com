@@ -2,9 +2,18 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 <id>http://blog.xiao-jia.com/atom.xml</id>
 <title>随便想想</title>
-<updated>2012-11-15T11:50:06Z</updated>
+<updated>2012-11-16T23:59:14Z</updated>
 <link rel="self" href="http://blog.xiao-jia.com/atom.xml" type="application/atom+xml"/>
 <author><name>Xiao Jia</name><uri>http://blog.xiao-jia.com</uri></author>
+<entry>
+<title> Why prefer GitHub over Bitbucket</title>
+<category term="git"/>
+<category term="github"/>
+<category term="bitbucket"/>
+<id>http://blog.xiao-jia.com/2012/11/16/why-prefer-github-over-bitbucket/</id>
+<updated>2012-11-16T23:59:14Z</updated>
+<link href="http://blog.xiao-jia.com/2012/11/16/why-prefer-github-over-bitbucket/"/>
+</entry>
 <entry>
 <title> Learn Myself More Erlang</title>
 <category term="erlang"/>
@@ -36,13 +45,4 @@
 <id>http://blog.xiao-jia.com/2012/10/10/meng/</id>
 <updated>2012-10-10T22:32:32Z</updated>
 <link href="http://blog.xiao-jia.com/2012/10/10/meng/"/>
-</entry>
-<entry>
-<title> @sg (2)</title>
-<category term="singapore"/>
-<category term="life"/>
-<category term="game"/>
-<id>http://blog.xiao-jia.com/2012/10/08/one-month-sg/</id>
-<updated>2012-10-08T13:44:00Z</updated>
-<link href="http://blog.xiao-jia.com/2012/10/08/one-month-sg/"/>
 </entry>
